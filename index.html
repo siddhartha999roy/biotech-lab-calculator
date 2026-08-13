@@ -11,9 +11,7 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body {
-            font-family: 'Hind Siliguri', sans-serif;
-        }
+        body { font-family: 'Hind Siliguri', sans-serif; }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800 p-4 md:p-8">
@@ -104,7 +102,7 @@
         </div>
 
         <!-- Tool 4: Sequence Analyzer -->
-        <div class="p-5 bg-emerald-50 rounded-xl border border-emerald-100 shadow-sm">
+        <div class="mb-8 p-5 bg-emerald-50 rounded-xl border border-emerald-100 shadow-sm">
             <h2 class="text-xl font-bold text-emerald-900 mb-3">🧬 4. DNA Sequence Analyzer & Converter</h2>
             <div class="space-y-3">
                 <div>
@@ -113,6 +111,61 @@
                 </div>
                 <button onclick="calcDNA()" class="w-full bg-emerald-600 text-white py-2.5 rounded-lg hover:bg-emerald-700 font-semibold transition">Analyze Sequence</button>
                 <div id="dnaResult" class="mt-3 text-emerald-950 space-y-2 font-medium"></div>
+            </div>
+        </div>
+
+        <!-- Tool 5: PCR Master Mix Calculator -->
+        <div class="mb-8 p-5 bg-purple-50 rounded-xl border border-purple-100 shadow-sm">
+            <h2 class="text-xl font-bold text-purple-900 mb-3">🧫 5. PCR Master Mix Calculator</h2>
+            <div class="space-y-3">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Number of Reactions:</label>
+                        <input type="number" id="pcrRxns" placeholder="e.g. 10" step="1" class="w-full p-2.5 mt-1 border rounded-lg border-gray-300 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Vol per Reaction (&mu;L):</label>
+                        <input type="number" id="pcrVol" value="25" step="1" class="w-full p-2.5 mt-1 border rounded-lg border-gray-300 outline-none">
+                    </div>
+                </div>
+                <button onclick="calcPCR()" class="w-full bg-purple-600 text-white py-2.5 rounded-lg hover:bg-purple-700 font-semibold transition">Calculate Master Mix</button>
+                <div id="pcrResult" class="mt-2 text-purple-950 font-medium space-y-1"></div>
+            </div>
+        </div>
+
+        <!-- Tool 6: Protein MW & Isoelectric Point -->
+        <div class="mb-8 p-5 bg-teal-50 rounded-xl border border-teal-100 shadow-sm">
+            <h2 class="text-xl font-bold text-teal-900 mb-3">🔬 6. Protein Molecular Weight & Isoelectric Point ($\text{pI}$)</h2>
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Amino Acid Sequence (1-Letter Code):</label>
+                    <input type="text" id="protSeq" placeholder="e.g. MVLSPADKTN" class="w-full p-2.5 mt-1 border rounded-lg border-gray-300 uppercase outline-none">
+                </div>
+                <button onclick="calcProtein()" class="w-full bg-teal-600 text-white py-2.5 rounded-lg hover:bg-teal-700 font-semibold transition">Calculate Protein Params</button>
+                <div id="protResult" class="mt-2 text-teal-950 font-medium"></div>
+            </div>
+        </div>
+
+        <!-- Tool 7: Quick Database Linker -->
+        <div class="p-5 bg-rose-50 rounded-xl border border-rose-100 shadow-sm">
+            <h2 class="text-xl font-bold text-rose-900 mb-3">🔗 7. RCSB PDB & NCBI Quick Linker</h2>
+            <div class="space-y-3">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">RCSB PDB ID (4 characters):</label>
+                        <div class="flex gap-2 mt-1">
+                            <input type="text" id="pdbId" placeholder="e.g. 1TRZ" maxlength="4" class="w-full p-2.5 border rounded-lg border-gray-300 uppercase outline-none">
+                            <button onclick="openPDB()" class="bg-rose-600 text-white px-4 rounded-lg hover:bg-rose-700 font-semibold transition">Open</button>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">NCBI Nucleotide Search Term:</label>
+                        <div class="flex gap-2 mt-1">
+                            <input type="text" id="ncbiTerm" placeholder="e.g. Insulin human" class="w-full p-2.5 border rounded-lg border-gray-300 outline-none">
+                            <button onclick="openNCBI()" class="bg-rose-600 text-white px-4 rounded-lg hover:bg-rose-700 font-semibold transition">Search</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -188,7 +241,6 @@
             let tm = (a + t) * 2 + (g + c) * 4;
             if (len >= 14) tm = 64.9 + 41 * (g + c - 16.4) / len;
 
-            // Reverse Complement
             const map = {'A':'T', 'T':'A', 'G':'C', 'C':'G'};
             const revComp = seq.split('').reverse().map(base => map[base]).join('');
             const mrna = seq.replace(/T/g, 'U');
@@ -198,6 +250,73 @@
                 <p>• <strong>Reverse Complement (3'-5'):</strong> <code class="bg-gray-200 px-1 rounded">${revComp}</code></p>
                 <p>• <strong>mRNA Transcribed:</strong> <code class="bg-gray-200 px-1 rounded">${mrna}</code></p>
             `;
+        }
+
+        function calcPCR() {
+            const n = parseInt(document.getElementById('pcrRxns').value);
+            const totalVol = parseFloat(document.getElementById('pcrVol').value) || 25;
+            if(!n || n <= 0) {
+                document.getElementById('pcrResult').innerText = "দয়া করে সঠিক Reaction সংখ্যা লিখুন।";
+                return;
+            }
+            // Standard 25uL PCR Reaction proportions
+            const buffer = (totalVol * 0.1) * n;
+            const dntp = (totalVol * 0.04) * n;
+            const fPrimer = (totalVol * 0.04) * n;
+            const rPrimer = (totalVol * 0.04) * n;
+            const taq = (totalVol * 0.01) * n;
+            const water = (totalVol * 0.77) * n;
+
+            document.getElementById('pcrResult').innerHTML = `
+                <p><strong>Master Mix for ${n} Reactions (${totalVol * n} &mu;L Total):</strong></p>
+                <p>• 10x Buffer: <strong>${buffer.toFixed(1)} &mu;L</strong></p>
+                <p>• dNTP Mix (10mM): <strong>${dntp.toFixed(1)} &mu;L</strong></p>
+                <p>• Forward Primer (10&mu;M): <strong>${fPrimer.toFixed(1)} &mu;L</strong></p>
+                <p>• Reverse Primer (10&mu;M): <strong>${rPrimer.toFixed(1)} &mu;L</strong></p>
+                <p>• Taq Polymerase: <strong>${taq.toFixed(1)} &mu;L</strong></p>
+                <p>• Nuclease-Free Water: <strong>${water.toFixed(1)} &mu;L</strong></p>
+            `;
+        }
+
+        function calcProtein() {
+            const seq = document.getElementById('protSeq').value.trim().toUpperCase();
+            if (!seq || !/^[ACDEFGHIKLMNPQRSTVWY]+$/.test(seq)) {
+                document.getElementById('protResult').innerHTML = '<span class="text-red-500 font-semibold">সঠিক ১-লেটার Amino Acid সিকোয়েন্স দিন।</span>';
+                return;
+            }
+            const weights = {
+                'A':89.09, 'R':174.20, 'N':132.12, 'D':133.10, 'C':121.16, 'E':147.13, 'Q':146.15,
+                'G':75.07, 'H':155.16, 'I':131.17, 'L':131.17, 'K':146.19, 'M':149.21, 'F':165.19,
+                'P':115.13, 'S':105.09, 'T':119.12, 'W':204.23, 'Y':181.19, 'V':117.15
+            };
+            let totalMw = 0;
+            for(let char of seq) {
+                totalMw += weights[char] || 0;
+            }
+            totalMw -= (seq.length - 1) * 18.015; // Water loss during peptide bond
+
+            // Isoelectric point estimate based on basic/acidic residues
+            const pos = (seq.match(/[RKH]/g) || []).length;
+            const neg = (seq.match(/[DE]/g) || []).length;
+            let estPI = 7.0 + (pos - neg) * 0.5;
+            if (estPI < 3) estPI = 3;
+            if (estPI > 10) estPI = 10;
+
+            document.getElementById('protResult').innerHTML = `
+                <p>• <strong>Residue Count:</strong> ${seq.length} aa</p>
+                <p>• <strong>Est. Molecular Weight:</strong> ${(totalMw / 1000).toFixed(2)} kDa (${totalMw.toFixed(2)} Da)</p>
+                <p>• <strong>Est. Isoelectric Point ($\text{pI}$):</strong> ~${estPI.toFixed(1)}</p>
+            `;
+        }
+
+        function openPDB() {
+            const id = document.getElementById('pdbId').value.trim();
+            if(id) window.open(`https://www.rcsb.org/structure/${id}`, '_blank');
+        }
+
+        function openNCBI() {
+            const term = document.getElementById('ncbiTerm').value.trim();
+            if(term) window.open(`https://www.ncbi.nlm.nih.gov/nuccore/?term=${encodeURIComponent(term)}`, '_blank');
         }
     </script>
 </body>
