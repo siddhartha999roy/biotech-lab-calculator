@@ -4,16 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Biotech Lab Suite 🧬</title>
+    <!-- Google Bengali Font (Hind Siliguri) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+        }
+    </style>
 </head>
-<body class="bg-gray-100 text-gray-800 font-sans p-4 md:p-8">
+<body class="bg-gray-100 text-gray-800 p-4 md:p-8">
     <div class="max-w-3xl mx-auto bg-white p-6 md:p-8 rounded-2xl shadow-xl border border-gray-200">
         
         <!-- Header -->
         <div class="text-center mb-8 border-b pb-4">
             <h1 class="text-3xl md:text-4xl font-extrabold text-indigo-600">🧬 Biotech Lab Suite</h1>
-            <p class="text-gray-500 mt-1 text-sm font-medium">EWU GEB স্টুডেন্টদের জন্য অল-ইন-ওয়ান ল্যাব টুলস</p>
+            <p class="text-gray-600 mt-1 text-base font-semibold">EWU GEB স্টুডেন্টদের জন্য অল-ইন-ওয়ান ল্যাব টুলস</p>
         </div>
 
         <!-- Tool 1: Molarity Calculator -->
@@ -154,7 +163,7 @@
             const ratio = a260 / a280;
             let status = "";
             if (ratio >= 1.8 && ratio <= 2.0) {
-                status = "<span class='text-green-600 font-bold'>Pure Pure DNA/RNA (Optimal)</span>";
+                status = "<span class='text-green-600 font-bold'>Pure DNA/RNA (Optimal)</span>";
             } else if (ratio < 1.8) {
                 status = "<span class='text-red-600 font-bold'>Low (Protein/Phenol Contamination)</span>";
             } else {
