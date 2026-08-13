@@ -81,7 +81,7 @@
                 </div>
             </div>
 
-            <!-- Tool 2: Dilution (ANY 3 INPUTS FLEXIBLE CALCULATOR) -->
+            <!-- Tool 2: Dilution -->
             <div class="p-5 bg-blue-50 dark:bg-gray-700/50 rounded-xl border border-blue-100 dark:border-gray-600 shadow-sm">
                 <h2 class="text-xl font-bold text-blue-900 dark:text-blue-300 mb-2">💧 2. Dilution Calculator (C₁V₁ = C₂V₂)</h2>
                 <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">* C₁, V₁, C₂ অথবা V₂ এর যেকোনো একটি খালি রাখুন, সেটি স্বয়ংক্রিয়ভাবে বের হয়ে যাবে।</p>
@@ -109,9 +109,54 @@
                 </div>
             </div>
 
-            <!-- Tool 3: Purity -->
+            <!-- NEW TOOL: Agarose Gel Calculator -->
+            <div class="p-5 bg-green-50 dark:bg-gray-700/50 rounded-xl border border-green-100 dark:border-gray-600 shadow-sm">
+                <h2 class="text-xl font-bold text-green-900 dark:text-green-300 mb-3">🧫 3. Agarose Gel Prep Calculator</h2>
+                <div class="space-y-3">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Gel Concentration (%):</label>
+                            <input type="number" id="gelPct" placeholder="e.g. 1.0" step="0.1" class="w-full p-2.5 mt-1 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Gel Volume (mL):</label>
+                            <input type="number" id="gelVol" placeholder="e.g. 50" step="1" class="w-full p-2.5 mt-1 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
+                        </div>
+                    </div>
+                    <button onclick="calcGel()" class="w-full bg-green-600 text-white py-2.5 rounded-lg hover:bg-green-700 font-semibold transition">Calculate Agarose Needed</button>
+                    <div id="gelResult" class="mt-2 text-green-950 dark:text-green-200 font-medium"></div>
+                </div>
+            </div>
+
+            <!-- NEW TOOL: Centrifuge RPM <-> RCF Converter -->
+            <div class="p-5 bg-orange-50 dark:bg-gray-700/50 rounded-xl border border-orange-100 dark:border-gray-600 shadow-sm">
+                <h2 class="text-xl font-bold text-orange-900 dark:text-orange-300 mb-3">🌀 4. Centrifuge Converter (RPM ↔ RCF/g)</h2>
+                <div class="space-y-3">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">Radius (cm):</label>
+                            <input type="number" id="cfRadius" value="10" step="0.1" class="w-full p-2.5 mt-1 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">Speed (RPM):</label>
+                            <input type="number" id="cfRPM" placeholder="e.g. 10000" class="w-full p-2.5 mt-1 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">Force (RCF / ×g):</label>
+                            <input type="number" id="cfRCF" placeholder="e.g. 11200" class="w-full p-2.5 mt-1 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
+                        </div>
+                    </div>
+                    <div class="flex gap-3">
+                        <button onclick="rpmToRcf()" class="w-1/2 bg-orange-600 text-white py-2.5 rounded-lg hover:bg-orange-700 font-semibold transition">RPM ➔ RCF</button>
+                        <button onclick="rcfToRpm()" class="w-1/2 bg-orange-600 text-white py-2.5 rounded-lg hover:bg-orange-700 font-semibold transition">RCF ➔ RPM</button>
+                    </div>
+                    <div id="cfResult" class="mt-2 text-orange-950 dark:text-orange-200 font-medium"></div>
+                </div>
+            </div>
+
+            <!-- Tool 5: Purity -->
             <div class="p-5 bg-amber-50 dark:bg-gray-700/50 rounded-xl border border-amber-100 dark:border-gray-600 shadow-sm">
-                <h2 class="text-xl font-bold text-amber-900 dark:text-amber-300 mb-3">📊 3. DNA/RNA Purity Check (A₂₆₀/A₂₈₀)</h2>
+                <h2 class="text-xl font-bold text-amber-900 dark:text-amber-300 mb-3">📊 5. DNA/RNA Purity Check (A₂₆₀/A₂₈₀)</h2>
                 <div class="space-y-3">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                         <div>
@@ -128,9 +173,9 @@
                 </div>
             </div>
 
-            <!-- Tool 4: PCR -->
+            <!-- Tool 6: PCR -->
             <div class="p-5 bg-purple-50 dark:bg-gray-700/50 rounded-xl border border-purple-100 dark:border-gray-600 shadow-sm">
-                <h2 class="text-xl font-bold text-purple-900 dark:text-purple-300 mb-3">🧫 4. PCR Master Mix Calculator</h2>
+                <h2 class="text-xl font-bold text-purple-900 dark:text-purple-300 mb-3">🧫 6. PCR Master Mix Calculator</h2>
                 <div class="space-y-3">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                         <div>
@@ -213,8 +258,9 @@
             </div>
         </div>
 
-        <!-- SECTION 3: EWU CGPA CALCULATOR -->
+        <!-- SECTION 3: EWU CGPA CALCULATOR & PLANNER -->
         <div id="sec-ewu" class="space-y-6 hidden">
+            <!-- EWU CGPA Calculator -->
             <div class="p-5 bg-cyan-50 dark:bg-gray-700/50 rounded-xl border border-cyan-100 dark:border-gray-600 shadow-sm">
                 <h2 class="text-xl font-bold text-cyan-900 dark:text-cyan-300 mb-2">🎓 EWU Grading System CGPA Calculator</h2>
                 <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">A=4.0, A-=3.7, B+=3.3, B=3.0, B-=2.7, C+=2.3, C=2.0, C-=1.7, D+=1.3, D=1.0, F=0.0</p>
@@ -244,6 +290,33 @@
                     <button onclick="calcCGPA()" class="bg-cyan-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-cyan-700 transition">Calculate CGPA</button>
                 </div>
                 <div id="cgpaResult" class="mt-4 text-cyan-950 dark:text-cyan-200 font-bold text-xl"></div>
+            </div>
+
+            <!-- NEW TOOL: Target CGPA Planner -->
+            <div class="p-5 bg-sky-50 dark:bg-gray-700/50 rounded-xl border border-sky-100 dark:border-gray-600 shadow-sm">
+                <h2 class="text-xl font-bold text-sky-900 dark:text-sky-300 mb-3">🎯 Target CGPA Planner</h2>
+                <div class="space-y-3">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">Current CGPA:</label>
+                            <input type="number" id="currCGPA" placeholder="e.g. 3.25" step="0.01" class="w-full p-2.5 mt-1 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">Completed Credits:</label>
+                            <input type="number" id="completedCredits" placeholder="e.g. 60" step="1" class="w-full p-2.5 mt-1 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">Target CGPA:</label>
+                            <input type="number" id="targetCGPA" placeholder="e.g. 3.50" step="0.01" class="w-full p-2.5 mt-1 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">Remaining Credits:</label>
+                            <input type="number" id="remainingCredits" placeholder="e.g. 80" step="1" class="w-full p-2.5 mt-1 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
+                        </div>
+                    </div>
+                    <button onclick="calcTargetGPA()" class="w-full bg-sky-600 text-white py-2.5 rounded-lg hover:bg-sky-700 font-semibold transition">Calculate Required GPA</button>
+                    <div id="targetResult" class="mt-2 text-sky-950 dark:text-sky-200 font-medium"></div>
+                </div>
             </div>
         </div>
 
@@ -287,7 +360,6 @@
                 Department of Genetic Engineering & Biotechnology, East West University
             </p>
             
-            <!-- Social Links & FB Username Display -->
             <div class="mt-3 flex flex-col items-center gap-1.5">
                 <a href="https://facebook.com/siddharth3roy" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-semibold hover:bg-blue-700 transition shadow-sm">
                     <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
@@ -345,7 +417,6 @@
             `;
         }
 
-        // SMART DILUTION CALCULATOR (Supports C1, V1, C2, V2 Flexible Input)
         function calcDilution() {
             const c1 = parseFloat(document.getElementById('c1').value);
             const v1 = parseFloat(document.getElementById('v1').value);
@@ -386,6 +457,44 @@
                     <p>• Final Target Concentration (C₂): <strong>${resC2.toFixed(2)}</strong></p>
                 `;
             }
+        }
+
+        function calcGel() {
+            const pct = parseFloat(document.getElementById('gelPct').value);
+            const vol = parseFloat(document.getElementById('gelVol').value);
+            if (!pct || !vol) {
+                document.getElementById('gelResult').innerText = "দয়া করে সঠিক মান প্রবেশ করান।";
+                return;
+            }
+            const agarose = (pct / 100) * vol;
+            document.getElementById('gelResult').innerHTML = `
+                <p>• Agarose Powder: <strong>${agarose.toFixed(2)} g</strong></p>
+                <p>• 1x TAE/TBE Buffer: <strong>${vol} mL</strong></p>
+            `;
+        }
+
+        function rpmToRcf() {
+            const r = parseFloat(document.getElementById('cfRadius').value);
+            const rpm = parseFloat(document.getElementById('cfRPM').value);
+            if(!r || !rpm) {
+                document.getElementById('cfResult').innerText = "Radius এবং RPM উভয় মান দিন।";
+                return;
+            }
+            const rcf = 1.118 * Math.pow(10, -5) * r * Math.pow(rpm, 2);
+            document.getElementById('cfRCF').value = Math.round(rcf);
+            document.getElementById('cfResult').innerHTML = `Calculated RCF: <strong>${Math.round(rcf)} ×g</strong>`;
+        }
+
+        function rcfToRpm() {
+            const r = parseFloat(document.getElementById('cfRadius').value);
+            const rcf = parseFloat(document.getElementById('cfRCF').value);
+            if(!r || !rcf) {
+                document.getElementById('cfResult').innerText = "Radius এবং RCF উভয় মান দিন।";
+                return;
+            }
+            const rpm = Math.sqrt(rcf / (1.118 * Math.pow(10, -5) * r));
+            document.getElementById('cfRPM').value = Math.round(rpm);
+            document.getElementById('cfResult').innerHTML = `Calculated Speed: <strong>${Math.round(rpm)} RPM</strong>`;
         }
 
         function calcPurity() {
@@ -493,7 +602,7 @@
             for(let char of seq) {
                 mw += weights[char];
             }
-            mw -= (seq.length - 1) * 18.015; // Water loss during peptide bond formation
+            mw -= (seq.length - 1) * 18.015;
 
             document.getElementById('protResult').innerHTML = `
                 <p>• <strong>Amino Acid Count:</strong> ${seq.length} aa</p>
@@ -556,6 +665,28 @@
 
             const cgpa = totalPoints / totalCredits;
             document.getElementById('cgpaResult').innerText = `Calculated CGPA: ${cgpa.toFixed(2)} (Total Credits: ${totalCredits})`;
+        }
+
+        function calcTargetGPA() {
+            const currCGPA = parseFloat(document.getElementById('currCGPA').value);
+            const compCred = parseFloat(document.getElementById('completedCredits').value);
+            const targetCGPA = parseFloat(document.getElementById('targetCGPA').value);
+            const remCred = parseFloat(document.getElementById('remainingCredits').value);
+
+            if (isNaN(currCGPA) || isNaN(compCred) || isNaN(targetCGPA) || isNaN(remCred)) {
+                document.getElementById('targetResult').innerText = "দয়া করে ৪টি ঘরই সঠিকভাবে পূরণ করুন।";
+                return;
+            }
+
+            const reqGPA = ((targetCGPA * (compCred + remCred)) - (currCGPA * compCred)) / remCred;
+
+            if (reqGPA > 4.0) {
+                document.getElementById('targetResult').innerHTML = `<span class='text-red-500 font-semibold'>Required GPA: ${reqGPA.toFixed(2)} (এটি ৪.০০-এর বেশি, তাই এই টার্গেট অর্জন করা সম্ভব নয়!)</span>`;
+            } else if (reqGPA < 0) {
+                document.getElementById('targetResult').innerHTML = `<span class='text-green-600 font-semibold'>আপনি ইতিমধ্যে আপনার টার্গেট CGPA অর্জন করেছেন!</span>`;
+            } else {
+                document.getElementById('targetResult').innerHTML = `বাকি <strong>${remCred}</strong> ক্রেডিটে আপনাকে গড়ে অন্তত <strong>${reqGPA.toFixed(2)}</strong> GPA বজায় রাখতে হবে।`;
+            }
         }
 
         function genCite() {
