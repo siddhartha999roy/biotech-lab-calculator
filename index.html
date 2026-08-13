@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Biotech & Academic Toolkit</title>
+    <title>Biotech & Academic Toolkit v2.5 Pro</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -16,18 +16,39 @@
 
     <!-- Toast Notification -->
     <div id="toast" class="fixed bottom-5 right-5 bg-emerald-600 text-white px-4 py-2 rounded-lg shadow-lg hidden transition-opacity duration-300 z-50 text-sm">
-        কপি করা হয়েছে!
+        কপি করা হয়েছে!
+    </div>
+
+    <!-- Command Palette Modal (Ctrl + K) -->
+    <div id="cmdModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-start justify-center pt-20 px-4" onclick="closeCmdPalette(event)">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-xl w-full p-4 border border-gray-200 dark:border-gray-700">
+            <input type="text" id="cmdInput" oninput="filterCmds()" placeholder="🔍 যেকোনো টুল অনুসন্ধান করুন... (e.g. Molarity, Primer, Citation)" class="w-full p-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg outline-none text-sm mb-3">
+            <div id="cmdList" class="max-h-60 overflow-y-auto space-y-1">
+                <!-- Dynamic Items -->
+            </div>
+            <div class="mt-3 text-right">
+                <span class="text-xs text-gray-400">Press Esc to close</span>
+            </div>
+        </div>
     </div>
 
     <!-- Header & Dark Mode Toggle -->
     <header class="bg-indigo-700 dark:bg-indigo-950 text-white shadow-md sticky top-0 z-40">
         <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
             <h1 class="text-xl md:text-2xl font-bold flex items-center gap-2">
-                🧬 Biotech & Academic Toolkit <span class="text-xs bg-indigo-500 text-white px-2 py-0.5 rounded-full">v2.0</span>
+                🧬 Biotech & Academic Toolkit <span class="text-xs bg-indigo-500 text-white px-2 py-0.5 rounded-full">v2.5 Pro</span>
             </h1>
-            <button onclick="toggleDarkMode()" class="p-2 bg-indigo-600 dark:bg-indigo-800 hover:bg-indigo-500 dark:hover:bg-indigo-700 rounded-lg text-sm flex items-center gap-2 transition">
-                <span id="themeIcon">🌙</span> <span id="themeText" class="hidden sm:inline">Dark Mode</span>
-            </button>
+            <div class="flex items-center gap-2">
+                <button onclick="openCmdPalette()" class="p-2 bg-indigo-600 dark:bg-indigo-800 hover:bg-indigo-500 rounded-lg text-xs flex items-center gap-1">
+                    <span>⌨️</span> <span class="hidden sm:inline">Search (Ctrl+K)</span>
+                </button>
+                <button onclick="window.print()" class="p-2 bg-indigo-600 dark:bg-indigo-800 hover:bg-indigo-500 rounded-lg text-xs flex items-center gap-1">
+                    <span>🖨️</span> <span class="hidden sm:inline">Export PDF</span>
+                </button>
+                <button onclick="toggleDarkMode()" class="p-2 bg-indigo-600 dark:bg-indigo-800 hover:bg-indigo-500 rounded-lg text-sm flex items-center gap-2 transition">
+                    <span id="themeIcon">🌙</span> <span id="themeText" class="hidden sm:inline">Dark Mode</span>
+                </button>
+            </div>
         </div>
     </header>
 
@@ -49,13 +70,12 @@
         <div id="section-lab" class="tab-content grid grid-cols-1 md:grid-cols-2 gap-6">
 
             <!-- Molarity Calculator -->
-            <div class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow border border-gray-200 dark:border-gray-700">
+            <div id="tool-molarity" class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow border border-gray-200 dark:border-gray-700">
                 <div class="flex justify-between items-center mb-3">
                     <h2 class="text-lg font-bold text-indigo-600 dark:text-indigo-400">1. Molarity Calculator (Mass)</h2>
                     <span class="text-xs bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 px-2 py-1 rounded">M = m / (MW × V)</span>
                 </div>
                 
-                <!-- Quick MW Selection -->
                 <div class="mb-3">
                     <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Quick Select Common Chemical:</label>
                     <select onchange="applyPresetMW(this.value)" class="w-full p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-sm outline-none">
@@ -91,7 +111,7 @@
             </div>
 
             <!-- Dilution Calculator -->
-            <div class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow border border-gray-200 dark:border-gray-700">
+            <div id="tool-dilution" class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow border border-gray-200 dark:border-gray-700">
                 <div class="flex justify-between items-center mb-3">
                     <h2 class="text-lg font-bold text-blue-600 dark:text-blue-400">2. Dilution Calculator</h2>
                     <span class="text-xs bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 px-2 py-1 rounded">C₁V₁ = C₂V₂</span>
@@ -123,7 +143,7 @@
             </div>
 
             <!-- Gel Preparation Calculator -->
-            <div class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow border border-gray-200 dark:border-gray-700">
+            <div id="tool-gel" class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow border border-gray-200 dark:border-gray-700">
                 <h2 class="text-lg font-bold text-emerald-600 dark:text-emerald-400 mb-3">3. Agarose Gel Preparation</h2>
                 <div class="grid grid-cols-2 gap-3 mb-4">
                     <div>
@@ -143,7 +163,7 @@
             </div>
 
             <!-- Centrifuge RPM to RCF -->
-            <div class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow border border-gray-200 dark:border-gray-700">
+            <div id="tool-centrifuge" class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow border border-gray-200 dark:border-gray-700">
                 <h2 class="text-lg font-bold text-amber-600 dark:text-amber-400 mb-3">4. Centrifuge Converter (RPM ↔ RCF/g)</h2>
                 <div class="grid grid-cols-3 gap-3 mb-4">
                     <div>
@@ -168,7 +188,7 @@
             </div>
 
             <!-- Nucleic Acid Purity (A260/A280) -->
-            <div class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow border border-gray-200 dark:border-gray-700">
+            <div id="tool-purity" class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow border border-gray-200 dark:border-gray-700">
                 <h2 class="text-lg font-bold text-rose-600 dark:text-rose-400 mb-3">5. DNA/RNA Purity (A₂₆₀/A₂₈₀)</h2>
                 <div class="grid grid-cols-2 gap-3 mb-4">
                     <div>
@@ -187,8 +207,8 @@
                 <div id="purityResult" class="mt-3 text-sm font-medium p-3 bg-rose-50 dark:bg-gray-700/50 rounded-lg min-h-[42px]"></div>
             </div>
 
-            <!-- PCR Master Mix Calculator (Enhanced) -->
-            <div class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow border border-gray-200 dark:border-gray-700">
+            <!-- PCR Master Mix Calculator -->
+            <div id="tool-pcr" class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow border border-gray-200 dark:border-gray-700">
                 <h2 class="text-lg font-bold text-purple-600 dark:text-purple-400 mb-3">6. PCR Master Mix Calculator</h2>
                 <div class="grid grid-cols-3 gap-3 mb-4">
                     <div>
@@ -211,9 +231,51 @@
                 <div id="pcrResult" class="mt-3 text-sm p-3 bg-purple-50 dark:bg-gray-700/50 rounded-lg min-h-[42px]"></div>
             </div>
 
-            <!-- NEW TOOL: Unit Converter -->
-            <div class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow border border-gray-200 dark:border-gray-700 md:col-span-2">
-                <h2 class="text-lg font-bold text-teal-600 dark:text-teal-400 mb-3">7. Lab Unit Quick Converter (নিউ ফিচার)</h2>
+            <!-- NEW: Antibiotic / Stock Solution Working Vol Calculator -->
+            <div id="tool-antibiotic" class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow border border-gray-200 dark:border-gray-700">
+                <h2 class="text-lg font-bold text-orange-600 dark:text-orange-400 mb-3">7. Antibiotic Stock Addition Calculator</h2>
+                <div class="grid grid-cols-3 gap-2 mb-4">
+                    <div>
+                        <label class="block text-xs font-medium mb-1">Stock Conc. (mg/mL)</label>
+                        <input type="number" id="abStock" placeholder="e.g. 100" class="w-full p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-sm outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium mb-1">Target Conc. (µg/mL)</label>
+                        <input type="number" id="abTarget" placeholder="e.g. 100" class="w-full p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-sm outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium mb-1">Media Vol. (mL)</label>
+                        <input type="number" id="abMedia" placeholder="e.g. 200" class="w-full p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-sm outline-none">
+                    </div>
+                </div>
+                <button onclick="calcAntibiotic()" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-medium py-2 rounded-lg text-sm transition">Stock Volume বের করুন</button>
+                <div id="abResult" class="mt-3 text-sm font-medium p-3 bg-orange-50 dark:bg-gray-700/50 rounded-lg min-h-[42px]"></div>
+            </div>
+
+            <!-- NEW: Bacterial Growth & Doubling Time Calculator -->
+            <div id="tool-growth" class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow border border-gray-200 dark:border-gray-700">
+                <h2 class="text-lg font-bold text-lime-600 dark:text-lime-400 mb-3">8. Bacterial Growth & Doubling Time</h2>
+                <div class="grid grid-cols-2 gap-3 mb-2">
+                    <div>
+                        <label class="block text-xs font-medium mb-1">Initial OD₆₀₀ (N₀)</label>
+                        <input type="number" id="od0" step="any" placeholder="e.g. 0.1" class="w-full p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-sm outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium mb-1">Final OD₆₀₀ (N_t)</label>
+                        <input type="number" id="odt" step="any" placeholder="e.g. 0.8" class="w-full p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-sm outline-none">
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-xs font-medium mb-1">Time Elapsed (Hours)</label>
+                    <input type="number" id="odTime" step="any" placeholder="e.g. 3" class="w-full p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-sm outline-none">
+                </div>
+                <button onclick="calcBacterialGrowth()" class="w-full bg-lime-600 hover:bg-lime-700 text-white font-medium py-2 rounded-lg text-sm transition">Doubling Time ($t_d$) বের করুন</button>
+                <div id="growthResult" class="mt-3 text-sm font-medium p-3 bg-lime-50 dark:bg-gray-700/50 rounded-lg min-h-[42px]"></div>
+            </div>
+
+            <!-- Lab Unit Converter -->
+            <div id="tool-unit" class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow border border-gray-200 dark:border-gray-700 md:col-span-2">
+                <h2 class="text-lg font-bold text-teal-600 dark:text-teal-400 mb-3">9. Lab Unit Quick Converter</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <div>
                         <label class="block text-xs font-medium mb-1">Value</label>
@@ -242,7 +304,7 @@
         <div id="section-bioinfo" class="tab-content grid grid-cols-1 md:grid-cols-2 gap-6 hidden">
 
             <!-- DNA Sequence Manipulator -->
-            <div class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow border border-gray-200 dark:border-gray-700">
+            <div id="tool-dnaseq" class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow border border-gray-200 dark:border-gray-700">
                 <h2 class="text-lg font-bold text-emerald-600 dark:text-emerald-400 mb-3">1. DNA Sequence Suite</h2>
                 <textarea id="dnaSeq" rows="3" placeholder="DNA Sequence লিখুন (e.g. ATGCGATCGAT)" class="w-full p-2.5 text-sm border rounded-lg bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 uppercase font-mono outline-none mb-3"></textarea>
                 <div class="flex gap-2">
@@ -252,9 +314,25 @@
                 <div id="dnaResult" class="mt-3 text-sm p-3 bg-emerald-50 dark:bg-gray-700/50 rounded-lg min-h-[42px]"></div>
             </div>
 
+            <!-- NEW: Primer Tm & Annealing Temp Calculator -->
+            <div id="tool-primer" class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow border border-gray-200 dark:border-gray-700">
+                <h2 class="text-lg font-bold text-indigo-600 dark:text-indigo-400 mb-3">2. Primer Tm & Annealing Analyzer</h2>
+                <input type="text" id="primerSeq" placeholder="Primer Sequence (5'->3')" class="w-full p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 uppercase font-mono text-sm outline-none mb-3">
+                <button onclick="calcPrimer()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 rounded-lg text-sm transition">Calculate Tm & Ta</button>
+                <div id="primerResult" class="mt-3 text-sm p-3 bg-indigo-50 dark:bg-gray-700/50 rounded-lg min-h-[42px]"></div>
+            </div>
+
+            <!-- NEW: Restriction Enzyme Site Finder -->
+            <div id="tool-restriction" class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow border border-gray-200 dark:border-gray-700">
+                <h2 class="text-lg font-bold text-red-600 dark:text-red-400 mb-3">3. Restriction Cut Site Finder</h2>
+                <textarea id="reSeq" rows="2" placeholder="Sequence (e.g. GAATTC = EcoRI, GGATCC = BamHI)" class="w-full p-2.5 text-sm border rounded-lg bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 uppercase font-mono outline-none mb-3"></textarea>
+                <button onclick="findRestrictionSites()" class="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2 rounded-lg text-sm transition">Search Cut Sites</button>
+                <div id="reResult" class="mt-3 text-sm p-3 bg-red-50 dark:bg-gray-700/50 rounded-lg min-h-[42px]"></div>
+            </div>
+
             <!-- Sequence Identity -->
-            <div class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow border border-gray-200 dark:border-gray-700">
-                <h2 class="text-lg font-bold text-cyan-600 dark:text-cyan-400 mb-3">2. Pairwise Identity Checker</h2>
+            <div id="tool-align" class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow border border-gray-200 dark:border-gray-700">
+                <h2 class="text-lg font-bold text-cyan-600 dark:text-cyan-400 mb-3">4. Pairwise Identity Checker</h2>
                 <input type="text" id="alignSeq1" placeholder="Sequence 1" class="w-full p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 uppercase font-mono text-sm outline-none mb-2">
                 <input type="text" id="alignSeq2" placeholder="Sequence 2" class="w-full p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 uppercase font-mono text-sm outline-none mb-3">
                 <div class="flex gap-2">
@@ -264,9 +342,9 @@
                 <div id="alignResult" class="mt-3 text-sm p-3 bg-cyan-50 dark:bg-gray-700/50 rounded-lg min-h-[42px]"></div>
             </div>
 
-            <!-- Protein MW & Properties Calculator (Enhanced) -->
-            <div class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow border border-gray-200 dark:border-gray-700">
-                <h2 class="text-lg font-bold text-sky-600 dark:text-sky-400 mb-3">3. Protein MW & Properties</h2>
+            <!-- Protein MW & Properties Calculator -->
+            <div id="tool-protein" class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow border border-gray-200 dark:border-gray-700">
+                <h2 class="text-lg font-bold text-sky-600 dark:text-sky-400 mb-3">5. Protein MW & Properties</h2>
                 <textarea id="protSeq" rows="3" placeholder="Single-letter Amino Acid Sequence (e.g. MKWVTFISLLFLFSSAYS)" class="w-full p-2.5 text-sm border rounded-lg bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 uppercase font-mono outline-none mb-3"></textarea>
                 <div class="flex gap-2">
                     <button onclick="calcProtein()" class="flex-1 bg-sky-600 hover:bg-sky-700 text-white font-medium py-2 rounded-lg text-sm transition">Calculate Properties</button>
@@ -275,10 +353,18 @@
                 <div id="protResult" class="mt-3 text-sm p-3 bg-sky-50 dark:bg-gray-700/50 rounded-lg min-h-[42px]"></div>
             </div>
 
+            <!-- NEW: FASTA File Sanitizer & Cleaner -->
+            <div id="tool-fasta" class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow border border-gray-200 dark:border-gray-700">
+                <h2 class="text-lg font-bold text-yellow-600 dark:text-yellow-400 mb-3">6. FASTA Formatter & Sanitizer</h2>
+                <textarea id="fastaRaw" rows="3" placeholder="Paste unformatted raw text with numbers, spaces..." class="w-full p-2.5 text-sm border rounded-lg bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 font-mono outline-none mb-3"></textarea>
+                <button onclick="cleanFasta()" class="w-full bg-yellow-600 hover:bg-yellow-700 text-white font-medium py-2 rounded-lg text-sm transition">Sanitize & Clean FASTA</button>
+                <div id="fastaResult" class="mt-3 text-sm p-3 bg-yellow-50 dark:bg-gray-700/50 rounded-lg min-h-[42px] font-mono break-all"></div>
+            </div>
+
             <!-- External Databases Direct Search -->
-            <div class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow border border-gray-200 dark:border-gray-700">
-                <h2 class="text-lg font-bold text-violet-600 dark:text-violet-400 mb-3">4. Database Quick Jump</h2>
-                <div class="space-y-3">
+            <div id="tool-db" class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow border border-gray-200 dark:border-gray-700 md:col-span-2">
+                <h2 class="text-lg font-bold text-violet-600 dark:text-violet-400 mb-3">7. Database Quick Jump</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div class="flex gap-2">
                         <input type="text" id="pdbId" placeholder="RCSB PDB ID (e.g. 1TRZ)" class="flex-1 p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-sm outline-none uppercase font-mono">
                         <button onclick="openPDB()" class="bg-violet-600 hover:bg-violet-700 text-white font-medium px-4 py-2 rounded-lg text-sm transition">Open PDB</button>
@@ -296,7 +382,7 @@
         <div id="section-cgpa" class="tab-content grid grid-cols-1 md:grid-cols-2 gap-6 hidden">
 
             <!-- Semester GPA Calculator -->
-            <div class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow border border-gray-200 dark:border-gray-700">
+            <div id="tool-cgpa" class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow border border-gray-200 dark:border-gray-700">
                 <div class="flex justify-between items-center mb-3">
                     <h2 class="text-lg font-bold text-indigo-600 dark:text-indigo-400">1. Semester GPA Calculator</h2>
                     <button onclick="addCourseRow()" class="bg-indigo-100 dark:bg-indigo-900/50 hover:bg-indigo-200 text-indigo-700 dark:text-indigo-300 text-xs px-2.5 py-1 rounded-lg font-semibold transition">+ Add Course</button>
@@ -327,7 +413,7 @@
             </div>
 
             <!-- Target CGPA Planner -->
-            <div class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow border border-gray-200 dark:border-gray-700">
+            <div id="tool-target" class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow border border-gray-200 dark:border-gray-700">
                 <h2 class="text-lg font-bold text-teal-600 dark:text-teal-400 mb-3">2. Target CGPA Planner</h2>
                 <div class="grid grid-cols-2 gap-3 mb-4">
                     <div>
@@ -347,21 +433,24 @@
                         <input type="number" id="remainingCredits" placeholder="e.g. 40" class="w-full p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-sm outline-none">
                     </div>
                 </div>
-                <button onclick="calcTargetGPA()" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-medium py-2 rounded-lg text-sm transition">প্রয়োজনীয় GPA বের করুন</button>
+                <button onclick="calcTargetGPA()" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-medium py-2 rounded-lg text-sm transition">প্রয়োজনীয় GPA বের করুন</button>
                 <div id="targetResult" class="mt-3 text-sm font-medium p-3 bg-teal-50 dark:bg-gray-700/50 rounded-lg min-h-[42px]"></div>
             </div>
 
-            <!-- Citation Generator -->
-            <div class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow border border-gray-200 dark:border-gray-700 md:col-span-2">
-                <h2 class="text-lg font-bold text-amber-600 dark:text-amber-400 mb-3">3. Rapid APA Reference Generator</h2>
+            <!-- Citation Generator (APA & BibTeX) -->
+            <div id="tool-citation" class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow border border-gray-200 dark:border-gray-700 md:col-span-2">
+                <h2 class="text-lg font-bold text-amber-600 dark:text-amber-400 mb-3">3. Academic Reference Generator (APA & BibTeX)</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 mb-4">
                     <input type="text" id="citeAuthor" placeholder="Author(s) (e.g. Smith, J.)" class="p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-sm outline-none">
                     <input type="text" id="citeYear" placeholder="Year (e.g. 2024)" class="p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-sm outline-none">
                     <input type="text" id="citeTitle" placeholder="Article Title" class="p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-sm outline-none">
                     <input type="text" id="citeJournal" placeholder="Journal Name" class="p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-sm outline-none">
                 </div>
-                <button onclick="genCite()" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-medium py-2 rounded-lg text-sm transition">Generate APA Citation</button>
-                <div id="citeResult" class="mt-3 text-sm p-3 bg-amber-50 dark:bg-gray-700/50 rounded-lg min-h-[42px] flex items-center justify-between"></div>
+                <div class="flex gap-2">
+                    <button onclick="genCite('apa')" class="flex-1 bg-amber-600 hover:bg-amber-700 text-white font-medium py-2 rounded-lg text-sm transition">Generate APA Citation</button>
+                    <button onclick="genCite('bibtex')" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 rounded-lg text-sm transition">Generate BibTeX (Overleaf)</button>
+                </div>
+                <div id="citeResult" class="mt-3 text-sm p-3 bg-amber-50 dark:bg-gray-700/50 rounded-lg min-h-[42px] font-mono whitespace-pre-wrap"></div>
             </div>
 
         </div>
@@ -369,7 +458,7 @@
 
     <!-- JavaScript Section -->
     <script>
-        // Tab Switcher Logic
+        // Tab Switcher
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -383,7 +472,7 @@
             activeBtn.classList.remove('text-gray-500', 'dark:text-gray-400');
         }
 
-        // Dark Mode Toggle Logic
+        // Dark Mode Toggle
         function toggleDarkMode() {
             const html = document.documentElement;
             const icon = document.getElementById('themeIcon');
@@ -402,14 +491,13 @@
             }
         }
 
-        // Initialize Theme from Saved Preference
         if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
             document.getElementById('themeIcon').innerText = '☀️';
             document.getElementById('themeText').innerText = 'Light Mode';
         }
 
-        // Copy Text Helper
+        // Copy Helper
         function copyText(text) {
             navigator.clipboard.writeText(text).then(() => {
                 const toast = document.getElementById('toast');
@@ -418,25 +506,15 @@
             });
         }
 
-        // Global Reset Helper
-        function resetInputs(inputIds, resultId) {
-            inputIds.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.value = '';
-            });
-            if (resultId) {
-                document.getElementById(resultId).innerHTML = '';
-            }
+        function resetInputs(ids, resultId) {
+            ids.forEach(id => document.getElementById(id).value = '');
+            if(resultId) document.getElementById(resultId).innerHTML = '';
         }
 
-        // Molarity Presets
+        // 1. Molarity Calculator
         function applyPresetMW(val) {
-            if (val) {
-                document.getElementById('molMW').value = val;
-            }
+            if(val) document.getElementById('molMW').value = val;
         }
-
-        // CALCULATOR FUNCTIONS
 
         function calcMolarity() {
             const mw = parseFloat(document.getElementById('molMW').value);
@@ -444,373 +522,230 @@
             const vol = parseFloat(document.getElementById('molVol').value);
 
             if (!mw || !conc || !vol) {
-                document.getElementById('molarityResult').innerText = "দয়া করে সবগুলো মান সঠিকভাবে প্রদান করুন।";
+                document.getElementById('molarityResult').innerText = "অনুগ্রহ করে সব তথ্য দিন!";
                 return;
             }
 
             const mass = conc * mw * (vol / 1000);
-            const resText = `প্রয়োজনীয় কেমিক্যালের ভর: ${mass.toFixed(4)} g`;
-            document.getElementById('molarityResult').innerHTML = `
-                <span>${resText}</span>
-                <button onclick="copyText('${mass.toFixed(4)} g')" class="ml-2 text-xs bg-indigo-200 dark:bg-indigo-800 hover:bg-indigo-300 dark:hover:bg-indigo-700 text-indigo-900 dark:text-indigo-100 px-2.5 py-1 rounded-md transition">Copy</button>
-            `;
+            const res = `প্রয়োজনীয় ভর: ${mass.toFixed(4)} গ্রাম (g)`;
+            document.getElementById('molarityResult').innerHTML = `<span>${res}</span> <button onclick="copyText('${mass.toFixed(4)} g')" class="text-xs bg-indigo-200 dark:bg-indigo-900 px-2 py-1 rounded">Copy</button>`;
         }
 
+        // 2. Dilution Calculator
         function calcDilution() {
             const c1 = parseFloat(document.getElementById('c1').value);
             const v1 = parseFloat(document.getElementById('v1').value);
             const c2 = parseFloat(document.getElementById('c2').value);
             const v2 = parseFloat(document.getElementById('v2').value);
 
-            let nullCount = [c1, v1, c2, v2].filter(v => isNaN(v)).length;
+            let res = "";
+            if (!c1 && v1 && c2 && v2) res = `C₁ = ${((c2 * v2) / v1).toFixed(3)}`;
+            else if (c1 && !v1 && c2 && v2) res = `V₁ = ${((c2 * v2) / c1).toFixed(3)} mL`;
+            else if (c1 && v1 && !c2 && v2) res = `C₂ = ${((c1 * v1) / v2).toFixed(3)}`;
+            else if (c1 && v1 && c2 && !v2) res = `V₂ = ${((c1 * v1) / c2).toFixed(3)} mL`;
+            else res = "ঠিক ৩টি ঘর পূরণ করুন!";
 
-            if (nullCount !== 1) {
-                document.getElementById('dilutionResult').innerText = "দয়া করে যেকোনো তিনটি ঘর পূরণ করুন এবং একটি খালি রাখুন।";
-                return;
-            }
-
-            let resText = "";
-            let copyVal = "";
-
-            if (isNaN(c1)) {
-                const res = (c2 * v2) / v1;
-                resText = `Stock Concentration (C₁) = ${res.toFixed(4)}`;
-                copyVal = `${res.toFixed(4)}`;
-            } else if (isNaN(v1)) {
-                const res = (c2 * v2) / c1;
-                const water = v2 - res;
-                resText = `প্রয়োজনীয় Stock (V₁) = ${res.toFixed(4)} mL (সাথে ${water > 0 ? water.toFixed(4) : 0} mL সলভেন্ট/পানি মেশাতে হবে)`;
-                copyVal = `${res.toFixed(4)} mL`;
-            } else if (isNaN(c2)) {
-                const res = (c1 * v1) / v2;
-                resText = `Target Concentration (C₂) = ${res.toFixed(4)}`;
-                copyVal = `${res.toFixed(4)}`;
-            } else if (isNaN(v2)) {
-                const res = (c1 * v1) / c2;
-                resText = `Target Volume (V₂) = ${res.toFixed(4)} mL`;
-                copyVal = `${res.toFixed(4)} mL`;
-            }
-
-            document.getElementById('dilutionResult').innerHTML = `
-                <div class="flex items-center justify-between">
-                    <span>${resText}</span>
-                    <button onclick="copyText('${copyVal}')" class="ml-2 text-xs bg-blue-200 dark:bg-blue-800 hover:bg-blue-300 dark:hover:bg-blue-700 text-blue-900 dark:text-blue-100 px-2.5 py-1 rounded-md transition">Copy</button>
-                </div>
-            `;
+            document.getElementById('dilutionResult').innerText = res;
         }
 
+        // 3. Gel Prep
         function calcGel() {
             const pct = parseFloat(document.getElementById('gelPct').value);
             const vol = parseFloat(document.getElementById('gelVol').value);
-
-            if (!pct || !vol) {
-                document.getElementById('gelResult').innerText = "দয়া করে Gel Concentration এবং Volume উভয়ই পূরণ করুন।";
-                return;
-            }
-
+            if (!pct || !vol) return document.getElementById('gelResult').innerText = "ইনপুট সঠিকভাবে দিন!";
             const mass = (pct / 100) * vol;
-            const resText = `প্রয়োজনীয় Agarose Powder = ${mass.toFixed(3)} g (in ${vol} mL Buffer)`;
-
-            document.getElementById('gelResult').innerHTML = `
-                <div class="flex items-center justify-between">
-                    <span>${resText}</span>
-                    <button onclick="copyText('${mass.toFixed(3)} g')" class="ml-2 text-xs bg-green-200 dark:bg-green-800 hover:bg-green-300 dark:hover:bg-green-700 text-green-900 dark:text-green-100 px-2.5 py-1 rounded-md transition">Copy</button>
-                </div>
-            `;
+            document.getElementById('gelResult').innerText = `Agarose লাগবে: ${mass.toFixed(2)} g (${vol} mL Buffer-এ)`;
         }
 
+        // 4. Centrifuge RPM/RCF
         function rpmToRcf() {
             const r = parseFloat(document.getElementById('cfRadius').value);
             const rpm = parseFloat(document.getElementById('cfRPM').value);
-
-            if (!r || !rpm) {
-                document.getElementById('cfResult').innerText = "দয়া করে Radius এবং Speed (RPM) উভয়ই প্রদান করুন।";
-                return;
-            }
-
+            if (!r || !rpm) return document.getElementById('cfResult').innerText = "Radius & RPM দিন!";
             const rcf = 1.118e-5 * r * Math.pow(rpm, 2);
             document.getElementById('cfRCF').value = Math.round(rcf);
-            document.getElementById('cfResult').innerHTML = `
-                <div class="flex items-center justify-between">
-                    <span>Calculated RCF: <strong>${Math.round(rcf)} ×g</strong></span>
-                    <button onclick="copyText('${Math.round(rcf)} g')" class="ml-2 text-xs bg-amber-200 dark:bg-amber-800 hover:bg-amber-300 dark:hover:bg-amber-700 text-amber-900 dark:text-amber-100 px-2.5 py-1 rounded-md transition">Copy</button>
-                </div>
-            `;
+            document.getElementById('cfResult').innerText = `RCF / Force = ${Math.round(rcf)} ×g`;
         }
 
         function rcfToRpm() {
             const r = parseFloat(document.getElementById('cfRadius').value);
             const rcf = parseFloat(document.getElementById('cfRCF').value);
-
-            if (!r || !rcf) {
-                document.getElementById('cfResult').innerText = "দয়া করে Radius এবং Force (RCF) উভয়ই প্রদান করুন।";
-                return;
-            }
-
+            if (!r || !rcf) return document.getElementById('cfResult').innerText = "Radius & RCF দিন!";
             const rpm = Math.sqrt(rcf / (1.118e-5 * r));
             document.getElementById('cfRPM').value = Math.round(rpm);
-            document.getElementById('cfResult').innerHTML = `
-                <div class="flex items-center justify-between">
-                    <span>Calculated Speed: <strong>${Math.round(rpm)} RPM</strong></span>
-                    <button onclick="copyText('${Math.round(rpm)}')" class="ml-2 text-xs bg-amber-200 dark:bg-amber-800 hover:bg-amber-300 dark:hover:bg-amber-700 text-amber-900 dark:text-amber-100 px-2.5 py-1 rounded-md transition">Copy</button>
-                </div>
-            `;
+            document.getElementById('cfResult').innerText = `Speed = ${Math.round(rpm)} RPM`;
         }
 
+        // 5. Purity
         function calcPurity() {
             const a260 = parseFloat(document.getElementById('a260').value);
             const a280 = parseFloat(document.getElementById('a280').value);
-
-            if (!a260 || !a280) {
-                document.getElementById('purityResult').innerText = "দয়া করে A₂₆₀ এবং A₂₈₀ উভয় মান প্রদান করুন।";
-                return;
-            }
-
-            const ratio = a260 / a280;
+            if(!a260 || !a280) return document.getElementById('purityResult').innerText = "উভয় Absorbance দিন!";
+            const ratio = (a260 / a280).toFixed(2);
             let status = "";
-            let colorClass = "";
-
-            if (ratio >= 1.7 && ratio <= 2.0) {
-                status = "বিশুদ্ধ DNA (Pure DNA)";
-                colorClass = "text-green-600 dark:text-green-400";
-            } else if (ratio > 2.0) {
-                status = "বিশুদ্ধ RNA / Possible RNA Contamination";
-                colorClass = "text-blue-600 dark:text-blue-400";
-            } else {
-                status = "Protein / Phenol Contamination (Low Purity)";
-                colorClass = "text-red-600 dark:text-red-400";
-            }
-
-            document.getElementById('purityResult').innerHTML = `
-                <div class="space-y-1">
-                    <p>A₂₆₀/A₂₈₀ Ratio: <strong>${ratio.toFixed(2)}</strong></p>
-                    <p class="${colorClass} font-semibold">স্ট্যাটাস: ${status}</p>
-                </div>
-            `;
+            if (ratio >= 1.8 && ratio <= 2.0) status = "✅ বিশুদ্ধ DNA/RNA (Pure)";
+            else if (ratio < 1.8) status = "⚠️ Protein Contamination রয়েছে";
+            else status = "⚠️ RNA Contamination / High A260";
+            document.getElementById('purityResult').innerText = `Ratio: ${ratio} ➔ ${status}`;
         }
 
+        // 6. PCR Master Mix
         function calcPCR() {
-            const rxns = parseInt(document.getElementById('pcrRxns').value);
-            const vol = parseFloat(document.getElementById('pcrVol').value);
-            const extraMargin = parseFloat(document.getElementById('pcrExtra').value) || 0;
+            const rxns = parseFloat(document.getElementById('pcrRxns').value);
+            const vol = parseFloat(document.getElementById('pcrVol').value) || 25;
+            const extra = parseFloat(document.getElementById('pcrExtra').value) || 10;
+            if(!rxns) return document.getElementById('pcrResult').innerText = "Reaction সংখ্যা দিন!";
 
-            if (!rxns || !vol) {
-                document.getElementById('pcrResult').innerText = "দয়া করে Reaction সংখ্যা এবং Volume প্রদান করুন।";
-                return;
-            }
-
-            const multiplier = 1 + (extraMargin / 100);
-            const totalRxns = rxns * multiplier;
-            const water = (vol * 0.6) * totalRxns;
-            const buffer = (vol * 0.2) * totalRxns;
-            const dntp = (vol * 0.08) * totalRxns;
-            const fPrimer = (vol * 0.04) * totalRxns;
-            const rPrimer = (vol * 0.04) * totalRxns;
-            const taq = (vol * 0.04) * totalRxns;
+            const totalRxns = rxns * (1 + extra/100);
+            const totalVol = totalRxns * vol;
 
             document.getElementById('pcrResult').innerHTML = `
-                <p class="text-xs text-purple-700 dark:text-purple-300 font-semibold mb-2">* Pipetting margin (${extraMargin}%) সহ Master Mix (${totalRxns.toFixed(1)} reactions):</p>
-                <ul class="list-disc list-inside text-xs space-y-1 font-mono">
-                    <li>Nuclease-free Water: <strong>${water.toFixed(1)} µL</strong></li>
-                    <li>10x PCR Buffer: <strong>${buffer.toFixed(1)} µL</strong></li>
-                    <li>dNTP Mix (10mM): <strong>${dntp.toFixed(1)} µL</strong></li>
-                    <li>Forward Primer (10µM): <strong>${fPrimer.toFixed(1)} µL</strong></li>
-                    <li>Reverse Primer (10µM): <strong>${rPrimer.toFixed(1)} µL</strong></li>
-                    <li>Taq Polymerase: <strong>${taq.toFixed(1)} µL</strong></li>
-                </ul>
-                <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">মোট Master Mix: <strong>${(water + buffer + dntp + fPrimer + rPrimer + taq).toFixed(1)} µL</strong> (প্রতি টিউবে ${vol * 0.8} µL মাস্টার মিক্স + ${(vol * 0.2).toFixed(1)} µL Template DNA যোগ করুন)</p>
+                <b>${rxns} Rxns (Margin সহ Total Volume: ${totalVol.toFixed(1)} µL):</b><br>
+                • Water: ${(totalVol * 0.6).toFixed(1)} µL<br>
+                • Buffer (10x): ${(totalVol * 0.1).toFixed(1)} µL<br>
+                • Primers (Fwd+Rev): ${(totalVol * 0.1).toFixed(1)} µL<br>
+                • dNTPs / Polymerase: ${(totalVol * 0.05).toFixed(1)} µL
             `;
         }
 
+        // 7. Antibiotic Working Vol
+        function calcAntibiotic() {
+            const stock = parseFloat(document.getElementById('abStock').value); // mg/mL
+            const target = parseFloat(document.getElementById('abTarget').value); // ug/mL
+            const media = parseFloat(document.getElementById('abMedia').value); // mL
+
+            if(!stock || !target || !media) return document.getElementById('abResult').innerText = "সব ঘর পূরণ করুন!";
+            
+            // Stock in ug/mL = stock * 1000
+            const stockUg = stock * 1000;
+            const volToAddMl = (target * media) / stockUg;
+            const volToAddUl = volToAddMl * 1000;
+
+            document.getElementById('abResult').innerText = `Media-তে যোগ করুন: ${volToAddUl.toFixed(2)} µL (বা ${volToAddMl.toFixed(4)} mL)`;
+        }
+
+        // 8. Bacterial Growth
+        function calcBacterialGrowth() {
+            const n0 = parseFloat(document.getElementById('od0').value);
+            const nt = parseFloat(document.getElementById('odt').value);
+            const t = parseFloat(document.getElementById('odTime').value);
+
+            if(!n0 || !nt || !t || nt <= n0) return document.getElementById('growthResult').innerText = "সঠিক OD ডাটা ও সময় দিন!";
+
+            const td = (t * Math.log(2)) / Math.log(nt / n0);
+            const mu = Math.log(nt / n0) / t; // Specific growth rate
+
+            document.getElementById('growthResult').innerText = `Doubling Time (t_d): ${(td*60).toFixed(1)} mins (${td.toFixed(2)} hrs) | Growth Rate (µ): ${mu.toFixed(3)} h⁻¹`;
+        }
+
+        // 9. Unit Converter
         function convertUnit() {
             const val = parseFloat(document.getElementById('unitVal').value);
             const type = document.getElementById('unitType').value;
+            if (isNaN(val)) return document.getElementById('unitResult').innerText = "মান প্রদান করুন!";
 
-            if (isNaN(val)) {
-                document.getElementById('unitResult').innerText = "দয়া করে একটি সঠিক ইনপুট সংখ্যা লিখুন।";
-                return;
+            let out = 0;
+            if(type.includes('m_mm') || type.includes('g_mg') || type.includes('mg_ug') || type.includes('ml_ul') || type.includes('mm_um')) {
+                out = val * 1000;
             }
+            document.getElementById('unitResult').innerText = `Converted Output: ${out}`;
+        }
 
-            let result = 0;
-            let unitStr = "";
+        // BIOINFORMATICS SUITE
+        function calcDNA() {
+            const seq = document.getElementById('dnaSeq').value.trim().toUpperCase();
+            if(!seq) return document.getElementById('dnaResult').innerText = "Sequence ইনপুট দিন!";
+            const len = seq.length;
+            const g = (seq.match(/G/g) || []).length;
+            const c = (seq.match(/C/g) || []).length;
+            const gc = (((g + c) / len) * 100).toFixed(2);
+            
+            const compMap = {'A':'T','T':'A','G':'C','C':'G'};
+            const revComp = seq.split('').reverse().map(b => compMap[b] || b).join('');
 
-            switch (type) {
-                case 'm_mm':
-                    result = val * 1000;
-                    unitStr = "mM";
-                    break;
-                case 'mm_um':
-                    result = val * 1000;
-                    unitStr = "µM";
-                    break;
-                case 'g_mg':
-                    result = val * 1000;
-                    unitStr = "mg";
-                    break;
-                case 'mg_ug':
-                    result = val * 1000;
-                    unitStr = "µg";
-                    break;
-                case 'ml_ul':
-                    result = val * 1000;
-                    unitStr = "µL";
-                    break;
-            }
-
-            document.getElementById('unitResult').innerHTML = `
-                <div class="flex items-center justify-between">
-                    <span>ফলাফল: <strong>${result.toLocaleString()} ${unitStr}</strong></span>
-                    <button onclick="copyText('${result} ${unitStr}')" class="ml-2 text-xs bg-teal-200 dark:bg-teal-800 hover:bg-teal-300 text-teal-900 dark:text-teal-100 px-2.5 py-1 rounded-md transition">Copy</button>
-                </div>
+            document.getElementById('dnaResult').innerHTML = `
+                Length: ${len} bp | GC Content: ${gc}%<br>
+                <b>Rev-Comp:</b> <span class="font-mono">${revComp}</span> 
+                <button onclick="copyText('${revComp}')" class="text-xs bg-emerald-200 dark:bg-emerald-900 px-2 py-0.5 rounded">Copy</button>
             `;
         }
 
-        function calcDNA() {
-            const seq = document.getElementById('dnaSeq').value.trim().toUpperCase();
-
-            if (!seq) {
-                document.getElementById('dnaResult').innerText = "দয়া করে একটি DNA Sequence লিখুন।";
-                return;
-            }
-
-            if (!/^[ATCGN]+$/.test(seq)) {
-                document.getElementById('dnaResult').innerText = "অকার্যকর সিকোয়েন্স! শুধু A, T, C, G বর্ণগুলো ব্যবহার করুন।";
-                return;
-            }
-
-            const len = seq.length;
-            const countA = (seq.match(/A/g) || []).length;
-            const countT = (seq.match(/T/g) || []).length;
-            const countC = (seq.match(/C/g) || []).length;
-            const countG = (seq.match(/G/g) || []).length;
-
-            const gcPct = (((countG + countC) / len) * 100).toFixed(2);
+        function calcPrimer() {
+            const p = document.getElementById('primerSeq').value.trim().toUpperCase();
+            if(!p) return document.getElementById('primerResult').innerText = "Primer দিন!";
+            const a = (p.match(/A/g) || []).length;
+            const t = (p.match(/T/g) || []).length;
+            const g = (p.match(/G/g) || []).length;
+            const c = (p.match(/C/g) || []).length;
             
-            const compMap = { 'A': 'T', 'T': 'A', 'C': 'G', 'G': 'C', 'N': 'N' };
-            const comp = seq.split('').map(b => compMap[b] || b).join('');
-            const revComp = comp.split('').reverse().join('');
-            const rna = seq.replace(/T/g, 'U');
-
             let tm = 0;
-            if (len < 14) {
-                tm = (countA + countT) * 2 + (countG + countC) * 4;
-            } else {
-                tm = 64.9 + 41 * (countG + countC - 16.4) / len;
-            }
+            if(p.length < 14) tm = (a+t)*2 + (g+c)*4;
+            else tm = 64.9 + 41*(g+c - 16.4)/(a+t+g+c);
 
-            document.getElementById('dnaResult').innerHTML = `
-                <div class="space-y-2 text-sm">
-                    <p><strong>দৈর্ঘ্য (Length):</strong> ${len} bp | <strong>GC Content:</strong> ${gcPct}% | <strong>Est. Tm:</strong> ${tm.toFixed(1)} °C</p>
-                    <p class="break-all"><strong>Complement (3' ➔ 5'):</strong> <span class="font-mono text-emerald-800 dark:text-emerald-300">${comp}</span></p>
-                    <p class="break-all"><strong>Reverse Complement (5' ➔ 3'):</strong> <span class="font-mono text-emerald-800 dark:text-emerald-300">${revComp}</span></p>
-                    <p class="break-all"><strong>Transcribed RNA (5' ➔ 3'):</strong> <span class="font-mono text-emerald-800 dark:text-emerald-300">${rna}</span></p>
-                </div>
-            `;
+            const ta = tm - 5; // General rule
+            document.getElementById('primerResult').innerText = `Length: ${p.length} nt | Tm: ${tm.toFixed(1)}°C | Suggested Annealing Temp (Ta): ${ta.toFixed(1)}°C`;
+        }
+
+        function findRestrictionSites() {
+            const seq = document.getElementById('reSeq').value.trim().toUpperCase();
+            if(!seq) return;
+            const enzymes = {
+                'EcoRI': 'GAATTC',
+                'BamHI': 'GGATCC',
+                'HindIII': 'AAGCTT',
+                'XhoI': 'CTCGAG',
+                'NotI': 'GCGGCCGC'
+            };
+            let found = [];
+            for(let key in enzymes) {
+                if(seq.includes(enzymes[key])) found.push(`<b>${key}</b> (${enzymes[key]})`);
+            }
+            document.getElementById('reResult').innerHTML = found.length ? `Found Sites: ${found.join(', ')}` : "কমন Restriction Cutting Site পাওয়া যায়নি।";
         }
 
         function calcAlign() {
             const s1 = document.getElementById('alignSeq1').value.trim().toUpperCase();
             const s2 = document.getElementById('alignSeq2').value.trim().toUpperCase();
-
-            if (!s1 || !s2) {
-                document.getElementById('alignResult').innerText = "দয়া করে দুইটি Sequence-ই প্রবেশ করান।";
-                return;
-            }
-
-            const minLen = Math.min(s1.length, s2.length);
-            const maxLen = Math.max(s1.length, s2.length);
+            if(!s1 || !s2) return;
             let matches = 0;
-
-            for (let i = 0; i < minLen; i++) {
-                if (s1[i] === s2[i]) matches++;
-            }
-
-            const identity = ((matches / maxLen) * 100).toFixed(2);
-
-            document.getElementById('alignResult').innerHTML = `
-                <div class="space-y-1">
-                    <p>মেলা বেস (Matches): <strong>${matches} / ${maxLen}</strong></p>
-                    <p>Sequence Identity: <strong>${identity}%</strong></p>
-                </div>
-            `;
+            const minLen = Math.min(s1.length, s2.length);
+            for(let i=0; i<minLen; i++) if(s1[i] === s2[i]) matches++;
+            const ident = ((matches / Math.max(s1.length, s2.length)) * 100).toFixed(2);
+            document.getElementById('alignResult').innerText = `Matches: ${matches} / ${Math.max(s1.length, s2.length)} | Identity: ${ident}%`;
         }
 
         function calcProtein() {
             const seq = document.getElementById('protSeq').value.trim().toUpperCase();
+            if(!seq) return;
+            const weights = {'A':89,'R':174,'N':132,'D':133,'C':121,'E':147,'Q':146,'G':75,'H':155,'I':131,'L':131,'K':146,'M':149,'F':165,'P':115,'S':105,'T':119,'W':204,'Y':181,'V':117};
+            let mw = 0;
+            for(let aa of seq) mw += weights[aa] || 110;
+            mw -= (seq.length - 1) * 18; // H2O loss
+            document.getElementById('protResult').innerText = `Length: ${seq.length} aa | Est. MW: ${(mw/1000).toFixed(2)} kDa (${mw.toFixed(1)} Da)`;
+        }
 
-            if (!seq) {
-                document.getElementById('protResult').innerText = "দয়া করে Amino Acid Sequence প্রবেশ করান।";
-                return;
-            }
-
-            const weights = {
-                'A': 89.09, 'R': 174.20, 'N': 132.12, 'D': 133.10, 'C': 121.16,
-                'E': 147.13, 'Q': 146.15, 'G': 75.07, 'H': 155.16, 'I': 131.17,
-                'L': 131.17, 'K': 146.19, 'M': 149.21, 'F': 165.19, 'P': 115.13,
-                'S': 105.09, 'T': 119.12, 'W': 204.23, 'Y': 181.19, 'V': 117.15
-            };
-
-            let totalMw = 0;
-            let invalidChar = false;
-
-            // Simple Isoelectric Point Iso-electric estimation counters
-            let posCharge = 0; // K, R, H
-            let negCharge = 0; // D, E
-
-            for (let aa of seq) {
-                if (weights[aa]) {
-                    totalMw += weights[aa];
-                    if (['K', 'R', 'H'].includes(aa)) posCharge++;
-                    if (['D', 'E'].includes(aa)) negCharge++;
-                } else {
-                    invalidChar = true;
-                    break;
-                }
-            }
-
-            if (invalidChar) {
-                document.getElementById('protResult').innerText = "অকার্যকর অ্যামিনো এসিড সংকেত পাওয়া গেছে। শুধুমাত্র স্ট্যান্ডার্ড ১-অক্ষরের কোড ব্যবহার করুন।";
-                return;
-            }
-
-            if (seq.length > 1) {
-                totalMw -= (seq.length - 1) * 18.015;
-            }
-
-            const kDa = (totalMw / 1000).toFixed(2);
-            const netChargeAt7 = posCharge - negCharge;
-
-            document.getElementById('protResult').innerHTML = `
-                <div class="space-y-1">
-                    <p>অ্যামিনো এসিড সংখ্যা: <strong>${seq.length} aa</strong></p>
-                    <p>Molecular Weight: <strong>${totalMw.toFixed(2)} Da (~${kDa} kDa)</strong></p>
-                    <p>Approximate Net Charge (pH 7): <strong class="${netChargeAt7 > 0 ? 'text-blue-500' : netChargeAt7 < 0 ? 'text-red-500' : ''}">${netChargeAt7 > 0 ? '+' + netChargeAt7 : netChargeAt7}</strong></p>
-                </div>
-            `;
+        function cleanFasta() {
+            const raw = document.getElementById('fastaRaw').value;
+            const cleaned = raw.replace(/>.*/g, '').replace(/[^a-zA-Z]/g, '').toUpperCase();
+            document.getElementById('fastaResult').innerText = `>Cleaned_Sequence\n${cleaned}`;
         }
 
         function openPDB() {
             const id = document.getElementById('pdbId').value.trim();
-            if (id) {
-                window.open(`https://www.rcsb.org/structure/${id}`, '_blank');
-            } else {
-                alert("দয়া করে একটি PDB ID লিখুন।");
-            }
+            if(id) window.open(`https://www.rcsb.org/structure/${id}`, '_blank');
         }
 
         function openNCBI() {
-            const term = document.getElementById('ncbiTerm').value.trim();
-            if (term) {
-                window.open(`https://www.ncbi.nlm.nih.gov/nucleotide/?term=${encodeURIComponent(term)}`, '_blank');
-            } else {
-                alert("দয়া করে একটি Search Term লিখুন।");
-            }
+            const q = document.getElementById('ncbiTerm').value.trim();
+            if(q) window.open(`https://www.ncbi.nlm.nih.gov/gquery/?term=${encodeURIComponent(q)}`, '_blank');
         }
 
+        // ACADEMIC & CGPA
         function addCourseRow() {
-            const div = document.createElement('div');
-            div.className = 'grid grid-cols-12 gap-2 mt-2';
-            div.innerHTML = `
+            const container = document.getElementById('courseRows');
+            const row = document.createElement('div');
+            row.className = "grid grid-cols-12 gap-2";
+            row.innerHTML = `
                 <input type="text" placeholder="Course Name" class="col-span-5 p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-sm outline-none">
                 <input type="number" placeholder="Credit" class="col-span-3 p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-sm course-credit outline-none" step="0.5" value="3">
                 <select class="col-span-4 p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-sm course-grade outline-none">
@@ -827,33 +762,24 @@
                     <option value="0.0">F (0.0)</option>
                 </select>
             `;
-            document.getElementById('courseRows').appendChild(div);
+            container.appendChild(row);
         }
 
         function calcCGPA() {
             const credits = document.querySelectorAll('.course-credit');
             const grades = document.querySelectorAll('.course-grade');
+            let totalPts = 0, totalCreds = 0;
 
-            let totalPoints = 0;
-            let totalCredits = 0;
+            credits.forEach((c, idx) => {
+                const cred = parseFloat(c.value) || 0;
+                const grd = parseFloat(grades[idx].value) || 0;
+                totalPts += cred * grd;
+                totalCreds += cred;
+            });
 
-            for (let i = 0; i < credits.length; i++) {
-                const c = parseFloat(credits[i].value);
-                const g = parseFloat(grades[i].value);
-
-                if (!isNaN(c) && !isNaN(g)) {
-                    totalPoints += c * g;
-                    totalCredits += c;
-                }
-            }
-
-            if (totalCredits === 0) {
-                document.getElementById('cgpaResult').innerText = "দয়া করে কোর্স ক্রেডিটের তথ্য সঠিকভাবে দিন।";
-                return;
-            }
-
-            const cgpa = (totalPoints / totalCredits).toFixed(2);
-            document.getElementById('cgpaResult').innerText = `আপনার সেমিস্টার GPA: ${cgpa} (মোট ক্রেডিট: ${totalCredits})`;
+            if(!totalCreds) return;
+            const gpa = (totalPts / totalCreds).toFixed(2);
+            document.getElementById('cgpaResult').innerText = `আপনার অর্জিত GPA: ${gpa} (Total Credits: ${totalCreds})`;
         }
 
         function calcTargetGPA() {
@@ -862,43 +788,84 @@
             const target = parseFloat(document.getElementById('targetCGPA').value);
             const rem = parseFloat(document.getElementById('remainingCredits').value);
 
-            if (isNaN(curr) || isNaN(comp) || isNaN(target) || isNaN(rem) || rem <= 0) {
-                document.getElementById('targetResult').innerText = "দয়া করে সঠিকভাবে ফিল্ডগুলো পূরণ করুন।";
-                return;
-            }
+            if(!curr || !comp || !target || !rem) return;
+            const req = ((target * (comp + rem)) - (curr * comp)) / rem;
+            document.getElementById('targetResult').innerText = req > 4.0 ? `অসম্ভব! প্রয়োজন ${req.toFixed(2)} (Max 4.00)` : `বাকি ক্রেডিটে গড় GPA অর্জন করতে হবে: ${req.toFixed(2)}`;
+        }
 
-            const currentPoints = curr * comp;
-            const totalCredits = comp + rem;
-            const targetPoints = target * totalCredits;
-            const requiredPoints = targetPoints - currentPoints;
-            const requiredGPA = requiredPoints / rem;
+        function genCite(type) {
+            const a = document.getElementById('citeAuthor').value || "Author";
+            const y = document.getElementById('citeYear').value || "Year";
+            const t = document.getElementById('citeTitle').value || "Title";
+            const j = document.getElementById('citeJournal').value || "Journal";
 
-            if (requiredGPA > 4.0) {
-                document.getElementById('targetResult').innerHTML = `<span class="text-red-600 dark:text-red-400 font-bold">লক্ষ্য অর্জনের জন্য প্রয়োজনীয় GPA (${requiredGPA.toFixed(2)}) সর্বোচ্চ মান ৪.০০ অতিক্রম করেছে!</span>`;
-            } else if (requiredGPA < 0) {
-                document.getElementById('targetResult').innerHTML = `<span class="text-green-600 dark:text-green-400 font-bold">আপনি ইতিমধ্যেই লক্ষ্যমাত্রার চেয়ে ভালো CGPA বজায় রাখছেন!</span>`;
+            if(type === 'apa') {
+                const text = `${a} (${y}). ${t}. ${j}.`;
+                document.getElementById('citeResult').innerText = text;
             } else {
-                document.getElementById('targetResult').innerHTML = `অবশিষ্ট ${rem} ক্রেডিটে আপনার অন্তত <strong>GPA ${requiredGPA.toFixed(2)}</strong> পাওয়া প্রয়োজন।`;
+                const bib = `@article{${a.split(' ')[0]}${y},\n  author = {${a}},\n  title = {${t}},\n  journal = {${j}},\n  year = {${y}}\n}`;
+                document.getElementById('citeResult').innerText = bib;
             }
         }
 
-        function genCite() {
-            const author = document.getElementById('citeAuthor').value.trim();
-            const year = document.getElementById('citeYear').value.trim();
-            const title = document.getElementById('citeTitle').value.trim();
-            const journal = document.getElementById('citeJournal').value.trim();
+        // COMMAND PALETTE LOGIC
+        const toolsList = [
+            { name: "1. Molarity Calculator", tab: "lab", id: "tool-molarity" },
+            { name: "2. Dilution Calculator (C1V1)", tab: "lab", id: "tool-dilution" },
+            { name: "3. Agarose Gel Prep", tab: "lab", id: "tool-gel" },
+            { name: "4. Centrifuge RPM/RCF", tab: "lab", id: "tool-centrifuge" },
+            { name: "5. DNA Purity (A260/A280)", tab: "lab", id: "tool-purity" },
+            { name: "6. PCR Master Mix", tab: "lab", id: "tool-pcr" },
+            { name: "7. Antibiotic Stock Vol", tab: "lab", id: "tool-antibiotic" },
+            { name: "8. Bacterial Growth & Doubling Time", tab: "lab", id: "tool-growth" },
+            { name: "1. DNA Sequence Suite", tab: "bioinfo", id: "tool-dnaseq" },
+            { name: "2. Primer Tm & Ta Calculator", tab: "bioinfo", id: "tool-primer" },
+            { name: "3. Restriction Cut Site Finder", tab: "bioinfo", id: "tool-restriction" },
+            { name: "5. Protein MW Calculator", tab: "bioinfo", id: "tool-protein" },
+            { name: "6. FASTA Formatter", tab: "bioinfo", id: "tool-fasta" },
+            { name: "1. Semester GPA Calculator", tab: "cgpa", id: "tool-cgpa" },
+            { name: "2. Target CGPA Planner", tab: "cgpa", id: "tool-target" },
+            { name: "3. Citation / Reference Generator", tab: "cgpa", id: "tool-citation" }
+        ];
 
-            if (!author || !year || !title || !journal) {
-                document.getElementById('citeResult').innerText = "রেফারেন্স তৈরি করতে সবগুলো তথ্য দিন।";
-                return;
-            }
-
-            const citation = `${author} (${year}). ${title}. <em>${journal}</em>.`;
-            document.getElementById('citeResult').innerHTML = `
-                <span>${citation}</span>
-                <button onclick="copyText('${author} (${year}). ${title}. ${journal}.')" class="ml-2 text-xs bg-amber-200 dark:bg-amber-800 hover:bg-amber-300 text-amber-900 dark:text-amber-100 px-2.5 py-1 rounded-md transition">Copy</button>
-            `;
+        function openCmdPalette() {
+            document.getElementById('cmdModal').classList.remove('hidden');
+            document.getElementById('cmdInput').focus();
+            filterCmds();
         }
+
+        function closeCmdPalette(e) {
+            if(!e || e.target.id === 'cmdModal') {
+                document.getElementById('cmdModal').classList.add('hidden');
+            }
+        }
+
+        function filterCmds() {
+            const q = document.getElementById('cmdInput').value.toLowerCase();
+            const list = document.getElementById('cmdList');
+            list.innerHTML = '';
+            toolsList.filter(t => t.name.toLowerCase().includes(q)).forEach(t => {
+                const item = document.createElement('div');
+                item.className = "p-2 rounded hover:bg-indigo-50 dark:hover:bg-gray-700 cursor-pointer text-sm flex justify-between";
+                item.innerHTML = `<span>${t.name}</span> <span class="text-xs text-gray-400 capitalize">${t.tab}</span>`;
+                item.onclick = () => {
+                    switchTab(t.tab);
+                    document.getElementById('cmdModal').classList.add('hidden');
+                    document.getElementById(t.id)?.scrollIntoView({ behavior: 'smooth' });
+                };
+                list.appendChild(item);
+            });
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                openCmdPalette();
+            }
+            if(e.key === 'Escape') {
+                document.getElementById('cmdModal').classList.add('hidden');
+            }
+        });
     </script>
 </body>
 </html>
