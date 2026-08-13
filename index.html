@@ -392,15 +392,70 @@
 
         </div>
 
-        <!-- TAB 3: CGPA & ACADEMIC -->
+        <!-- TAB 3: CGPA & ACADEMIC (RESTORED FULLY) -->
         <div id="section-cgpa" class="tab-content grid grid-cols-1 md:grid-cols-2 gap-6 hidden">
-            <div class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow border border-gray-200 dark:border-gray-700 md:col-span-2">
-                <h2 class="text-lg font-bold text-indigo-600 dark:text-indigo-400 mb-3">Academic Tools & CGPA</h2>
-                <p class="text-sm text-gray-600 dark:text-gray-300">CGPA Calculators, Course credit planners, and academic writing utilities will appear here.</p>
+            
+            <!-- Course CGPA Calculator -->
+            <div id="tool-cgpa-calc" class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow border border-gray-200 dark:border-gray-700">
+                <div class="flex justify-between items-center mb-3">
+                    <h2 class="text-lg font-bold text-indigo-600 dark:text-indigo-400">1. Semester GPA / CGPA Calculator</h2>
+                    <button onclick="addCourseRow()" class="text-xs bg-indigo-600 text-white px-3 py-1 rounded-lg hover:bg-indigo-700 transition">+ Course</button>
+                </div>
+                
+                <div id="courseContainer" class="space-y-2 mb-4">
+                    <div class="flex gap-2 course-row">
+                        <input type="text" placeholder="Course Name (Optional)" class="flex-1 p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-sm outline-none">
+                        <input type="number" step="0.5" placeholder="Credits" class="w-20 p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-sm outline-none course-credit">
+                        <select class="w-24 p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-sm outline-none course-grade">
+                            <option value="4.00">A (4.00)</option>
+                            <option value="3.75">A- (3.75)</option>
+                            <option value="3.50">B+ (3.50)</option>
+                            <option value="3.25">B (3.25)</option>
+                            <option value="3.00">B- (3.00)</option>
+                            <option value="2.75">C+ (2.75)</option>
+                            <option value="2.50">C (2.50)</option>
+                            <option value="2.25">C- (2.25)</option>
+                            <option value="2.00">D (2.00)</option>
+                            <option value="0.00">F (0.00)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flex gap-2">
+                    <button onclick="calculateGPA()" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 rounded-lg text-sm transition">Calculate GPA</button>
+                    <button onclick="resetGPA()" class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 px-3 rounded-lg text-xs transition">Reset</button>
+                </div>
+                <div id="gpaResult" class="mt-3 text-sm font-medium p-3 bg-indigo-50 dark:bg-gray-700/50 rounded-lg min-h-[42px]"></div>
             </div>
+
+            <!-- Target CGPA Planner -->
+            <div id="tool-target-cgpa" class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow border border-gray-200 dark:border-gray-700">
+                <h2 class="text-lg font-bold text-teal-600 dark:text-teal-400 mb-3">2. Target CGPA Planner</h2>
+                <div class="grid grid-cols-2 gap-3 mb-3">
+                    <div>
+                        <label class="block text-xs font-medium mb-1">Current CGPA</label>
+                        <input type="number" id="currCGPA" step="0.01" placeholder="e.g. 3.45" class="w-full p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-sm outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium mb-1">Completed Credits</label>
+                        <input type="number" id="currCredits" step="0.5" placeholder="e.g. 60" class="w-full p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-sm outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium mb-1">Target CGPA</label>
+                        <input type="number" id="targetCGPA" step="0.01" placeholder="e.g. 3.65" class="w-full p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-sm outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium mb-1">Upcoming Credits</label>
+                        <input type="number" id="upcomingCredits" step="0.5" placeholder="e.g. 15" class="w-full p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-sm outline-none">
+                    </div>
+                </div>
+                <button onclick="calcTargetGPA()" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-medium py-2 rounded-lg text-sm transition">প্রয়োজনীয় GPA হিসাব করুন</button>
+                <div id="targetGpaResult" class="mt-3 text-sm font-medium p-3 bg-teal-50 dark:bg-gray-700/50 rounded-lg min-h-[42px]"></div>
+            </div>
+
         </div>
 
-        <!-- TAB 4: AI WRITING & HEURISTIC ANALYZER (NEW INTEGRATION) -->
+        <!-- TAB 4: AI WRITING & HEURISTIC ANALYZER -->
         <div id="section-aianalyzer" class="tab-content grid grid-cols-1 gap-6 hidden">
             
             <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow border border-gray-200 dark:border-gray-700">
@@ -418,7 +473,7 @@
 
                 <textarea id="aiInputText" rows="6" oninput="analyzeTextHeuristics()" placeholder="এখানে আপনার টেক্সট পেস্ট করুন... (e.g. Furthermore, it is essential to delve deeper into the molecular mechanisms to supercharge our understanding...)" class="w-full p-3 border rounded-lg bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-sm outline-none font-sans mb-4 transition focus:ring-2 focus:ring-indigo-500"></textarea>
 
-                <!-- Key Metrics Cards (FEATURE 2) -->
+                <!-- Key Metrics Cards -->
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                     <div class="bg-indigo-50 dark:bg-gray-700/50 p-4 rounded-xl border border-indigo-100 dark:border-gray-600">
                         <span class="text-xs text-indigo-600 dark:text-indigo-300 font-semibold block uppercase">Word Count</span>
@@ -442,7 +497,7 @@
                     </div>
                 </div>
 
-                <!-- Estimated AI Percentage Gauge/Bar (FEATURE 1) -->
+                <!-- Estimated AI Percentage Gauge/Bar -->
                 <div class="mb-6 p-4 bg-gray-50 dark:bg-gray-700/30 rounded-xl border border-gray-200 dark:border-gray-700">
                     <div class="flex justify-between items-center mb-2">
                         <span class="text-sm font-bold text-gray-700 dark:text-gray-200">Estimated AI Probability Score:</span>
@@ -454,7 +509,7 @@
                     <p id="aiAnalysisSummary" class="text-xs text-gray-500 dark:text-gray-400 mt-2">বিশ্লেষণের জন্য কোনো টেক্সট প্রবেশ করান।</p>
                 </div>
 
-                <!-- Highlighted AI Buzzwords/Patterns (FEATURE 3) -->
+                <!-- Highlighted AI Buzzwords/Patterns -->
                 <div class="border border-gray-200 dark:border-gray-700 rounded-xl p-4 bg-white dark:bg-gray-800">
                     <div class="flex justify-between items-center mb-3">
                         <h3 class="text-sm font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2">
@@ -533,6 +588,8 @@
             { name: "Protein MW & Properties", tab: "bioinfo", id: "tool-protein" },
             { name: "FASTA Formatter & Sanitizer", tab: "bioinfo", id: "tool-fasta" },
             { name: "Database Quick Jump (PDB/NCBI)", tab: "bioinfo", id: "tool-db" },
+            { name: "Semester GPA / CGPA Calculator", tab: "cgpa", id: "tool-cgpa-calc" },
+            { name: "Target CGPA Planner", tab: "cgpa", id: "tool-target-cgpa" },
             { name: "AI Writing & Heuristic Analyzer", tab: "aianalyzer", id: "section-aianalyzer" }
         ];
 
@@ -701,16 +758,15 @@
         }
 
         function calcAntibiotic() {
-            const stock = parseFloat(document.getElementById('abStock').value); // mg/mL
-            const target = parseFloat(document.getElementById('abTarget').value); // ug/mL
-            const media = parseFloat(document.getElementById('abMedia').value); // mL
+            const stock = parseFloat(document.getElementById('abStock').value);
+            const target = parseFloat(document.getElementById('abTarget').value);
+            const media = parseFloat(document.getElementById('abMedia').value);
 
             if (!stock || !target || !media) {
                 document.getElementById('abResult').innerHTML = `<span class="text-red-500">সব তথ্য দিন।</span>`;
                 return;
             }
 
-            // (Target ug/mL * Media mL) / (Stock mg/mL * 1000 ug/mg)
             const addVolUl = ((target * media) / (stock * 1000)) * 1000;
             document.getElementById('abResult').innerHTML = `মিডিয়ায় যোগ করার জন্য Stock Volume: <b>${addVolUl.toFixed(2)} µL</b>`;
         }
@@ -873,7 +929,7 @@
 
             let mw = 0;
             for (let char of seq) {
-                mw += (aaWeights[char] || 110) - 18.015; // subtracting water
+                mw += (aaWeights[char] || 110) - 18.015;
             }
             mw += 18.015;
 
@@ -914,6 +970,111 @@
             if (term) window.open(`https://www.ncbi.nlm.nih.gov/gquery/?term=${encodeURIComponent(term)}`, '_blank');
         }
 
+        // --- TAB 3: ACADEMIC & CGPA LOGICS ---
+        function addCourseRow() {
+            const container = document.getElementById('courseContainer');
+            const row = document.createElement('div');
+            row.className = 'flex gap-2 course-row';
+            row.innerHTML = `
+                <input type="text" placeholder="Course Name (Optional)" class="flex-1 p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-sm outline-none">
+                <input type="number" step="0.5" placeholder="Credits" class="w-20 p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-sm outline-none course-credit">
+                <select class="w-24 p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-sm outline-none course-grade">
+                    <option value="4.00">A (4.00)</option>
+                    <option value="3.75">A- (3.75)</option>
+                    <option value="3.50">B+ (3.50)</option>
+                    <option value="3.25">B (3.25)</option>
+                    <option value="3.00">B- (3.00)</option>
+                    <option value="2.75">C+ (2.75)</option>
+                    <option value="2.50">C (2.50)</option>
+                    <option value="2.25">C- (2.25)</option>
+                    <option value="2.00">D (2.00)</option>
+                    <option value="0.00">F (0.00)</option>
+                </select>
+            `;
+            container.appendChild(row);
+        }
+
+        function calculateGPA() {
+            const credits = document.querySelectorAll('.course-credit');
+            const grades = document.querySelectorAll('.course-grade');
+
+            let totalPoints = 0;
+            let totalCredits = 0;
+
+            credits.forEach((creditInput, index) => {
+                const credit = parseFloat(creditInput.value);
+                const grade = parseFloat(grades[index].value);
+
+                if (!isNaN(credit) && credit > 0) {
+                    totalCredits += credit;
+                    totalPoints += credit * grade;
+                }
+            });
+
+            if (totalCredits === 0) {
+                document.getElementById('gpaResult').innerHTML = `<span class="text-red-500">কমপক্ষে একটি কোর্সের Credit প্রদান করুন।</span>`;
+                return;
+            }
+
+            const gpa = (totalPoints / totalCredits).toFixed(2);
+            document.getElementById('gpaResult').innerHTML = `
+                Calculated GPA: <b class="text-indigo-600 dark:text-indigo-400 text-base">${gpa}</b> (Total Credits: ${totalCredits})
+            `;
+        }
+
+        function resetGPA() {
+            const container = document.getElementById('courseContainer');
+            container.innerHTML = `
+                <div class="flex gap-2 course-row">
+                    <input type="text" placeholder="Course Name (Optional)" class="flex-1 p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-sm outline-none">
+                    <input type="number" step="0.5" placeholder="Credits" class="w-20 p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-sm outline-none course-credit">
+                    <select class="w-24 p-2 border rounded-lg bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-sm outline-none course-grade">
+                        <option value="4.00">A (4.00)</option>
+                        <option value="3.75">A- (3.75)</option>
+                        <option value="3.50">B+ (3.50)</option>
+                        <option value="3.25">B (3.25)</option>
+                        <option value="3.00">B- (3.00)</option>
+                        <option value="2.75">C+ (2.75)</option>
+                        <option value="2.50">C (2.50)</option>
+                        <option value="2.25">C- (2.25)</option>
+                        <option value="2.00">D (2.00)</option>
+                        <option value="0.00">F (0.00)</option>
+                    </select>
+                </div>
+            `;
+            document.getElementById('gpaResult').innerHTML = '';
+        }
+
+        function calcTargetGPA() {
+            const currCGPA = parseFloat(document.getElementById('currCGPA').value);
+            const currCredits = parseFloat(document.getElementById('currCredits').value);
+            const targetCGPA = parseFloat(document.getElementById('targetCGPA').value);
+            const upcomingCredits = parseFloat(document.getElementById('upcomingCredits').value);
+
+            if (isNaN(currCGPA) || isNaN(currCredits) || isNaN(targetCGPA) || isNaN(upcomingCredits) || upcomingCredits <= 0) {
+                document.getElementById('targetGpaResult').innerHTML = `<span class="text-red-500">সবগুলো ঘর সঠিকভাবে পূরণ করুন।</span>`;
+                return;
+            }
+
+            const totalTargetPoints = targetCGPA * (currCredits + upcomingCredits);
+            const currentPoints = currCGPA * currCredits;
+            const requiredGPA = (totalTargetPoints - currentPoints) / upcomingCredits;
+
+            if (requiredGPA > 4.00) {
+                document.getElementById('targetGpaResult').innerHTML = `
+                    <span class="text-red-500 font-bold">প্রয়োজনীয় GPA: ${requiredGPA.toFixed(2)}</span> (যা অর্জন করা সম্ভব নয়, সর্বোচ্চ 4.00)
+                `;
+            } else if (requiredGPA < 0) {
+                document.getElementById('targetGpaResult').innerHTML = `
+                    <span class="text-emerald-600 font-bold">আপনার বর্তমান CGPA এমনিতেই Target CGPA-এর থেকে বেশি!</span>
+                `;
+            } else {
+                document.getElementById('targetGpaResult').innerHTML = `
+                    পরবর্তী ${upcomingCredits} ক্রেডিটে আপনার অন্তত <b>${requiredGPA.toFixed(2)} GPA</b> প্রয়োজন।
+                `;
+            }
+        }
+
         // --- TAB 4: AI WRITING & HEURISTIC ANALYZER LOGIC ---
         const aiBuzzwordsList = [
             'delve', 'delving', 'furthermore', 'in conclusion', 'supercharge', 'dynamic',
@@ -949,7 +1110,7 @@
             const sentenceCount = sentences.length || 1;
             const avgSentenceLength = (wordCount / sentenceCount).toFixed(1);
 
-            // Burstiness Calculation (Variance in sentence lengths)
+            // Burstiness Calculation
             let sentenceLengths = sentences.map(s => (s.match(/\b[a-zA-Z0-9'-]+\b/g) || []).length);
             let variance = 0;
             if (sentenceLengths.length > 1) {
@@ -958,7 +1119,7 @@
             }
             const burstinessScore = Math.sqrt(variance).toFixed(2);
 
-            // Perplexity Heuristic Metric (Unique vocabulary diversity ratio)
+            // Perplexity Heuristic Metric
             const uniqueWords = new Set(words.map(w => w.toLowerCase()));
             const vocabDiversity = wordCount > 0 ? (uniqueWords.size / wordCount) : 0;
             let perplexityMetric = 'High';
@@ -981,17 +1142,14 @@
             // Estimated AI Percentage Calculation
             let aiScore = 0;
             
-            // Factor 1: Low Burstiness (AI tends to produce uniform sentence lengths)
             if (burstinessScore < 3.5 && wordCount > 20) aiScore += 35;
             else if (burstinessScore < 6.0 && wordCount > 20) aiScore += 20;
 
-            // Factor 2: Buzzword density
             const buzzwordRatio = wordCount > 0 ? (detectedBuzzwordsCount / wordCount) * 100 : 0;
             if (buzzwordRatio > 3) aiScore += 45;
             else if (buzzwordRatio > 1.5) aiScore += 30;
             else if (buzzwordRatio > 0) aiScore += 15;
 
-            // Factor 3: Low Perplexity (repetitive word pattern)
             if (perplexityMetric === 'Low' && wordCount > 30) aiScore += 20;
 
             if (aiScore > 100) aiScore = 98;
