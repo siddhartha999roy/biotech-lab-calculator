@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Biotech Lab Suite 🧬</title>
+    <title>Biotech Lab & Academic Suite 🧬</title>
     <!-- Google Bengali Font (Hind Siliguri) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,167 +12,258 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { font-family: 'Hind Siliguri', sans-serif; }
+        .tab-btn.active { border-bottom: 3px solid #4F46E5; color: #4F46E5; font-weight: 700; }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800 p-4 md:p-8">
-    <div class="max-w-3xl mx-auto bg-white p-6 md:p-8 rounded-2xl shadow-xl border border-gray-200">
+    <div class="max-w-4xl mx-auto bg-white p-6 md:p-8 rounded-2xl shadow-xl border border-gray-200">
         
         <!-- Header -->
-        <div class="text-center mb-8 border-b pb-4">
-            <h1 class="text-3xl md:text-4xl font-extrabold text-indigo-600">🧬 Biotech Lab Suite</h1>
-            <p class="text-gray-600 mt-1 text-base font-semibold">EWU GEB স্টুডেন্টদের জন্য অল-ইন-ওয়ান ল্যাব টুলস</p>
+        <div class="text-center mb-6 border-b pb-4">
+            <h1 class="text-3xl md:text-4xl font-extrabold text-indigo-600">🧬 EWU Biotech & Academic Suite</h1>
+            <p class="text-gray-600 mt-1 text-base font-semibold">East West University - GEB স্টুডেন্টদের জন্য অল-ইন-ওয়ান ড্যাশবোর্ড</p>
         </div>
 
-        <!-- Tool 1: Molarity Calculator -->
-        <div class="mb-8 p-5 bg-indigo-50 rounded-xl border border-indigo-100 shadow-sm">
-            <h2 class="text-xl font-bold text-indigo-900 mb-3">🧪 1. Molarity Calculator</h2>
-            <div class="space-y-3">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <!-- Tab Navigation -->
+        <div class="flex border-b mb-6 overflow-x-auto text-sm md:text-base">
+            <button onclick="switchTab('lab')" id="tab-lab" class="tab-btn active px-4 py-2 font-semibold text-gray-600 hover:text-indigo-600">🧪 Lab Calculators</button>
+            <button onclick="switchTab('seq')" id="tab-seq" class="tab-btn px-4 py-2 font-semibold text-gray-600 hover:text-indigo-600">🧬 Bio-Tools</button>
+            <button onclick="switchTab('ewu')" id="tab-ewu" class="tab-btn px-4 py-2 font-semibold text-gray-600 hover:text-indigo-600">🎓 EWU CGPA</button>
+            <button onclick="switchTab('cite')" id="tab-cite" class="tab-btn px-4 py-2 font-semibold text-gray-600 hover:text-indigo-600">📚 Citation & Recipes</button>
+        </div>
+
+        <!-- SECTION 1: LAB CALCULATORS -->
+        <div id="sec-lab" class="space-y-6">
+            <!-- Tool 1: Molarity -->
+            <div class="p-5 bg-indigo-50 rounded-xl border border-indigo-100 shadow-sm">
+                <h2 class="text-xl font-bold text-indigo-900 mb-3">🧪 1. Molarity Calculator</h2>
+                <div class="space-y-3">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Quick Select Chemical:</label>
+                            <select id="chemSelect" onchange="setMW()" class="w-full p-2.5 mt-1 border rounded-lg bg-white border-gray-300 outline-none">
+                                <option value="">-- Custom --</option>
+                                <option value="58.44">NaCl (58.44 g/mol)</option>
+                                <option value="292.24">EDTA (292.24 g/mol)</option>
+                                <option value="121.14">Tris-Base (121.14 g/mol)</option>
+                                <option value="288.38">SDS (288.38 g/mol)</option>
+                                <option value="180.16">Glucose (180.16 g/mol)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Molecular Weight (g/mol):</label>
+                            <input type="number" id="mw" placeholder="e.g. 58.44" step="0.01" class="w-full p-2.5 mt-1 border rounded-lg border-gray-300 outline-none">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Desired Molarity (M):</label>
+                            <input type="number" id="molarity" placeholder="e.g. 0.1" step="0.01" class="w-full p-2.5 mt-1 border rounded-lg border-gray-300 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Volume (Liters):</label>
+                            <input type="number" id="volume" placeholder="e.g. 1.0" step="0.1" class="w-full p-2.5 mt-1 border rounded-lg border-gray-300 outline-none">
+                        </div>
+                    </div>
+                    <button onclick="calcMolarity()" class="w-full bg-indigo-600 text-white py-2.5 rounded-lg hover:bg-indigo-700 font-semibold transition">Calculate Mass</button>
+                    <div id="molarityResult" class="mt-2 text-indigo-950 font-semibold text-lg"></div>
+                </div>
+            </div>
+
+            <!-- Tool 2: Dilution -->
+            <div class="p-5 bg-blue-50 rounded-xl border border-blue-100 shadow-sm">
+                <h2 class="text-xl font-bold text-blue-900 mb-3">💧 2. Dilution Calculator ($C_1V_1 = C_2V_2$)</h2>
+                <div class="space-y-3">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Stock Conc. ($C_1$):</label>
+                            <input type="number" id="c1" placeholder="e.g. 10" step="0.1" class="w-full p-2.5 mt-1 border rounded-lg border-gray-300 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Target Conc. ($C_2$):</label>
+                            <input type="number" id="c2" placeholder="e.g. 1" step="0.1" class="w-full p-2.5 mt-1 border rounded-lg border-gray-300 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Target Vol ($V_2$ mL):</label>
+                            <input type="number" id="v2" placeholder="e.g. 500" step="1" class="w-full p-2.5 mt-1 border rounded-lg border-gray-300 outline-none">
+                        </div>
+                    </div>
+                    <button onclick="calcDilution()" class="w-full bg-blue-600 text-white py-2.5 rounded-lg hover:bg-blue-700 font-semibold transition">Calculate Stock Volume ($V_1$)</button>
+                    <div id="dilutionResult" class="mt-2 text-blue-950 font-medium"></div>
+                </div>
+            </div>
+
+            <!-- Tool 3: Purity -->
+            <div class="p-5 bg-amber-50 rounded-xl border border-amber-100 shadow-sm">
+                <h2 class="text-xl font-bold text-amber-900 mb-3">📊 3. DNA/RNA Purity Check ($A_{260}/A_{280}$)</h2>
+                <div class="space-y-3">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Absorbance at 260 nm ($A_{260}$):</label>
+                            <input type="number" id="a260" placeholder="e.g. 0.9" step="0.01" class="w-full p-2.5 mt-1 border rounded-lg border-gray-300 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Absorbance at 280 nm ($A_{280}$):</label>
+                            <input type="number" id="a280" placeholder="e.g. 0.5" step="0.01" class="w-full p-2.5 mt-1 border rounded-lg border-gray-300 outline-none">
+                        </div>
+                    </div>
+                    <button onclick="calcPurity()" class="w-full bg-amber-600 text-white py-2.5 rounded-lg hover:bg-amber-700 font-semibold transition">Check Purity</button>
+                    <div id="purityResult" class="mt-2 text-amber-950 font-medium"></div>
+                </div>
+            </div>
+
+            <!-- Tool 4: PCR -->
+            <div class="p-5 bg-purple-50 rounded-xl border border-purple-100 shadow-sm">
+                <h2 class="text-xl font-bold text-purple-900 mb-3">🧫 4. PCR Master Mix Calculator</h2>
+                <div class="space-y-3">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Number of Reactions:</label>
+                            <input type="number" id="pcrRxns" placeholder="e.g. 10" step="1" class="w-full p-2.5 mt-1 border rounded-lg border-gray-300 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Vol per Reaction (&mu;L):</label>
+                            <input type="number" id="pcrVol" value="25" step="1" class="w-full p-2.5 mt-1 border rounded-lg border-gray-300 outline-none">
+                        </div>
+                    </div>
+                    <button onclick="calcPCR()" class="w-full bg-purple-600 text-white py-2.5 rounded-lg hover:bg-purple-700 font-semibold transition">Calculate Master Mix</button>
+                    <div id="pcrResult" class="mt-2 text-purple-950 font-medium space-y-1"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 2: BIO-TOOLS -->
+        <div id="sec-seq" class="space-y-6 hidden">
+            <!-- DNA Sequence Analyzer -->
+            <div class="p-5 bg-emerald-50 rounded-xl border border-emerald-100 shadow-sm">
+                <h2 class="text-xl font-bold text-emerald-900 mb-3">🧬 DNA Sequence Analyzer & Converter</h2>
+                <div class="space-y-3">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Quick Select Chemical:</label>
-                        <select id="chemSelect" onchange="setMW()" class="w-full p-2.5 mt-1 border rounded-lg bg-white border-gray-300 outline-none">
-                            <option value="">-- Custom --</option>
-                            <option value="58.44">NaCl (58.44 g/mol)</option>
-                            <option value="292.24">EDTA (292.24 g/mol)</option>
-                            <option value="121.14">Tris-Base (121.14 g/mol)</option>
-                            <option value="288.38">SDS (288.38 g/mol)</option>
-                            <option value="180.16">Glucose (180.16 g/mol)</option>
+                        <label class="block text-sm font-medium text-gray-700">DNA Sequence (5' to 3'):</label>
+                        <input type="text" id="dnaSeq" placeholder="e.g. ATGCGATCG" class="w-full p-2.5 mt-1 border rounded-lg border-gray-300 uppercase outline-none">
+                    </div>
+                    <button onclick="calcDNA()" class="w-full bg-emerald-600 text-white py-2.5 rounded-lg hover:bg-emerald-700 font-semibold transition">Analyze Sequence</button>
+                    <div id="dnaResult" class="mt-3 text-emerald-950 space-y-2 font-medium"></div>
+                </div>
+            </div>
+
+            <!-- Protein Calc -->
+            <div class="p-5 bg-teal-50 rounded-xl border border-teal-100 shadow-sm">
+                <h2 class="text-xl font-bold text-teal-900 mb-3">🔬 Protein MW & Isoelectric Point ($\text{pI}$)</h2>
+                <div class="space-y-3">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Amino Acid Sequence (1-Letter Code):</label>
+                        <input type="text" id="protSeq" placeholder="e.g. MVLSPADKTN" class="w-full p-2.5 mt-1 border rounded-lg border-gray-300 uppercase outline-none">
+                    </div>
+                    <button onclick="calcProtein()" class="w-full bg-teal-600 text-white py-2.5 rounded-lg hover:bg-teal-700 font-semibold transition">Calculate Protein Params</button>
+                    <div id="protResult" class="mt-2 text-teal-950 font-medium"></div>
+                </div>
+            </div>
+
+            <!-- Quick Linker -->
+            <div class="p-5 bg-rose-50 rounded-xl border border-rose-100 shadow-sm">
+                <h2 class="text-xl font-bold text-rose-900 mb-3">🔗 RCSB PDB & NCBI Quick Linker</h2>
+                <div class="space-y-3">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">RCSB PDB ID (4 characters):</label>
+                            <div class="flex gap-2 mt-1">
+                                <input type="text" id="pdbId" placeholder="e.g. 1TRZ" maxlength="4" class="w-full p-2.5 border rounded-lg border-gray-300 uppercase outline-none">
+                                <button onclick="openPDB()" class="bg-rose-600 text-white px-4 rounded-lg hover:bg-rose-700 font-semibold transition">Open</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">NCBI Nucleotide Search Term:</label>
+                            <div class="flex gap-2 mt-1">
+                                <input type="text" id="ncbiTerm" placeholder="e.g. Insulin human" class="w-full p-2.5 border rounded-lg border-gray-300 outline-none">
+                                <button onclick="openNCBI()" class="bg-rose-600 text-white px-4 rounded-lg hover:bg-rose-700 font-semibold transition">Search</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 3: EWU CGPA CALCULATOR -->
+        <div id="sec-ewu" class="space-y-6 hidden">
+            <div class="p-5 bg-cyan-50 rounded-xl border border-cyan-100 shadow-sm">
+                <h2 class="text-xl font-bold text-cyan-900 mb-2">🎓 EWU Grading System CGPA Calculator</h2>
+                <p class="text-xs text-gray-500 mb-4">A=4.0, A-=3.7, B+=3.3, B=3.0, B-=2.7, C+=2.3, C=2.0, C-=1.7, D+=1.3, D=1.0, F=0.0</p>
+                
+                <div id="courseRows" class="space-y-3">
+                    <div class="grid grid-cols-12 gap-2">
+                        <input type="text" placeholder="Course Name (e.g. GEB101)" class="col-span-5 p-2 border rounded-lg outline-none">
+                        <input type="number" placeholder="Credit" class="col-span-3 p-2 border rounded-lg course-credit outline-none" step="0.5" value="3">
+                        <select class="col-span-4 p-2 border rounded-lg course-grade outline-none">
+                            <option value="4.0">A (4.0)</option>
+                            <option value="3.7">A- (3.7)</option>
+                            <option value="3.3">B+ (3.3)</option>
+                            <option value="3.0">B (3.0)</option>
+                            <option value="2.7">B- (2.7)</option>
+                            <option value="2.3">C+ (2.3)</option>
+                            <option value="2.0">C (2.0)</option>
+                            <option value="1.7">C- (1.7)</option>
+                            <option value="1.3">D+ (1.3)</option>
+                            <option value="1.0">D (1.0)</option>
+                            <option value="0.0">F (0.0)</option>
                         </select>
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Molecular Weight (g/mol):</label>
-                        <input type="number" id="mw" placeholder="e.g. 58.44" step="0.01" class="w-full p-2.5 mt-1 border rounded-lg border-gray-300 outline-none">
-                    </div>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Desired Molarity (M):</label>
-                        <input type="number" id="molarity" placeholder="e.g. 0.1" step="0.01" class="w-full p-2.5 mt-1 border rounded-lg border-gray-300 outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Volume (Liters):</label>
-                        <input type="number" id="volume" placeholder="e.g. 1.0" step="0.1" class="w-full p-2.5 mt-1 border rounded-lg border-gray-300 outline-none">
-                    </div>
+
+                <div class="flex gap-3 mt-4">
+                    <button onclick="addCourseRow()" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-semibold hover:bg-gray-300 transition">+ Add Course</button>
+                    <button onclick="calcCGPA()" class="bg-cyan-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-cyan-700 transition">Calculate CGPA</button>
                 </div>
-                <button onclick="calcMolarity()" class="w-full bg-indigo-600 text-white py-2.5 rounded-lg hover:bg-indigo-700 font-semibold transition">Calculate Mass</button>
-                <div id="molarityResult" class="mt-2 text-indigo-950 font-semibold text-lg"></div>
+                <div id="cgpaResult" class="mt-4 text-cyan-950 font-bold text-xl"></div>
             </div>
         </div>
 
-        <!-- Tool 2: Dilution Calculator -->
-        <div class="mb-8 p-5 bg-blue-50 rounded-xl border border-blue-100 shadow-sm">
-            <h2 class="text-xl font-bold text-blue-900 mb-3">💧 2. Dilution Calculator ($C_1V_1 = C_2V_2$)</h2>
-            <div class="space-y-3">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Stock Conc. ($C_1$):</label>
-                        <input type="number" id="c1" placeholder="e.g. 10" step="0.1" class="w-full p-2.5 mt-1 border rounded-lg border-gray-300 outline-none">
+        <!-- SECTION 4: CITATION & RECIPES -->
+        <div id="sec-cite" class="space-y-6 hidden">
+            <!-- APA Citation Generator -->
+            <div class="p-5 bg-stone-50 rounded-xl border border-stone-200 shadow-sm">
+                <h2 class="text-xl font-bold text-stone-900 mb-3">📖 Lab Report APA Citation Generator</h2>
+                <div class="space-y-3">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <input type="text" id="citeAuthor" placeholder="Author(s) (e.g. Watson, J. D., & Crick, F. H.)" class="p-2.5 border rounded-lg outline-none">
+                        <input type="text" id="citeYear" placeholder="Year (e.g. 1953)" class="p-2.5 border rounded-lg outline-none">
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Target Conc. ($C_2$):</label>
-                        <input type="number" id="c2" placeholder="e.g. 1" step="0.1" class="w-full p-2.5 mt-1 border rounded-lg border-gray-300 outline-none">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <input type="text" id="citeTitle" placeholder="Article Title (e.g. Molecular structure of nucleic acids)" class="p-2.5 border rounded-lg outline-none">
+                        <input type="text" id="citeJournal" placeholder="Journal Name (e.g. Nature)" class="p-2.5 border rounded-lg outline-none">
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Target Vol ($V_2$ mL):</label>
-                        <input type="number" id="v2" placeholder="e.g. 500" step="1" class="w-full p-2.5 mt-1 border rounded-lg border-gray-300 outline-none">
-                    </div>
+                    <button onclick="genCite()" class="w-full bg-stone-700 text-white py-2.5 rounded-lg hover:bg-stone-800 font-semibold transition">Generate Reference</button>
+                    <div id="citeResult" class="mt-2 p-3 bg-white border rounded-lg text-stone-900 font-serif italic"></div>
                 </div>
-                <button onclick="calcDilution()" class="w-full bg-blue-600 text-white py-2.5 rounded-lg hover:bg-blue-700 font-semibold transition">Calculate Stock Volume ($V_1$)</button>
-                <div id="dilutionResult" class="mt-2 text-blue-950 font-medium"></div>
             </div>
-        </div>
 
-        <!-- Tool 3: DNA/RNA Purity Check -->
-        <div class="mb-8 p-5 bg-amber-50 rounded-xl border border-amber-100 shadow-sm">
-            <h2 class="text-xl font-bold text-amber-900 mb-3">📊 3. DNA/RNA Purity Check ($A_{260}/A_{280}$)</h2>
-            <div class="space-y-3">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Absorbance at 260 nm ($A_{260}$):</label>
-                        <input type="number" id="a260" placeholder="e.g. 0.9" step="0.01" class="w-full p-2.5 mt-1 border rounded-lg border-gray-300 outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Absorbance at 280 nm ($A_{280}$):</label>
-                        <input type="number" id="a280" placeholder="e.g. 0.5" step="0.01" class="w-full p-2.5 mt-1 border rounded-lg border-gray-300 outline-none">
-                    </div>
-                </div>
-                <button onclick="calcPurity()" class="w-full bg-amber-600 text-white py-2.5 rounded-lg hover:bg-amber-700 font-semibold transition">Check Purity</button>
-                <div id="purityResult" class="mt-2 text-amber-950 font-medium"></div>
-            </div>
-        </div>
-
-        <!-- Tool 4: Sequence Analyzer -->
-        <div class="mb-8 p-5 bg-emerald-50 rounded-xl border border-emerald-100 shadow-sm">
-            <h2 class="text-xl font-bold text-emerald-900 mb-3">🧬 4. DNA Sequence Analyzer & Converter</h2>
-            <div class="space-y-3">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">DNA Sequence (5' to 3'):</label>
-                    <input type="text" id="dnaSeq" placeholder="e.g. ATGCGATCG" class="w-full p-2.5 mt-1 border rounded-lg border-gray-300 uppercase outline-none">
-                </div>
-                <button onclick="calcDNA()" class="w-full bg-emerald-600 text-white py-2.5 rounded-lg hover:bg-emerald-700 font-semibold transition">Analyze Sequence</button>
-                <div id="dnaResult" class="mt-3 text-emerald-950 space-y-2 font-medium"></div>
-            </div>
-        </div>
-
-        <!-- Tool 5: PCR Master Mix Calculator -->
-        <div class="mb-8 p-5 bg-purple-50 rounded-xl border border-purple-100 shadow-sm">
-            <h2 class="text-xl font-bold text-purple-900 mb-3">🧫 5. PCR Master Mix Calculator</h2>
-            <div class="space-y-3">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Number of Reactions:</label>
-                        <input type="number" id="pcrRxns" placeholder="e.g. 10" step="1" class="w-full p-2.5 mt-1 border rounded-lg border-gray-300 outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Vol per Reaction (&mu;L):</label>
-                        <input type="number" id="pcrVol" value="25" step="1" class="w-full p-2.5 mt-1 border rounded-lg border-gray-300 outline-none">
-                    </div>
-                </div>
-                <button onclick="calcPCR()" class="w-full bg-purple-600 text-white py-2.5 rounded-lg hover:bg-purple-700 font-semibold transition">Calculate Master Mix</button>
-                <div id="pcrResult" class="mt-2 text-purple-950 font-medium space-y-1"></div>
-            </div>
-        </div>
-
-        <!-- Tool 6: Protein MW & Isoelectric Point -->
-        <div class="mb-8 p-5 bg-teal-50 rounded-xl border border-teal-100 shadow-sm">
-            <h2 class="text-xl font-bold text-teal-900 mb-3">🔬 6. Protein Molecular Weight & Isoelectric Point ($\text{pI}$)</h2>
-            <div class="space-y-3">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Amino Acid Sequence (1-Letter Code):</label>
-                    <input type="text" id="protSeq" placeholder="e.g. MVLSPADKTN" class="w-full p-2.5 mt-1 border rounded-lg border-gray-300 uppercase outline-none">
-                </div>
-                <button onclick="calcProtein()" class="w-full bg-teal-600 text-white py-2.5 rounded-lg hover:bg-teal-700 font-semibold transition">Calculate Protein Params</button>
-                <div id="protResult" class="mt-2 text-teal-950 font-medium"></div>
-            </div>
-        </div>
-
-        <!-- Tool 7: Quick Database Linker -->
-        <div class="p-5 bg-rose-50 rounded-xl border border-rose-100 shadow-sm">
-            <h2 class="text-xl font-bold text-rose-900 mb-3">🔗 7. RCSB PDB & NCBI Quick Linker</h2>
-            <div class="space-y-3">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">RCSB PDB ID (4 characters):</label>
-                        <div class="flex gap-2 mt-1">
-                            <input type="text" id="pdbId" placeholder="e.g. 1TRZ" maxlength="4" class="w-full p-2.5 border rounded-lg border-gray-300 uppercase outline-none">
-                            <button onclick="openPDB()" class="bg-rose-600 text-white px-4 rounded-lg hover:bg-rose-700 font-semibold transition">Open</button>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">NCBI Nucleotide Search Term:</label>
-                        <div class="flex gap-2 mt-1">
-                            <input type="text" id="ncbiTerm" placeholder="e.g. Insulin human" class="w-full p-2.5 border rounded-lg border-gray-300 outline-none">
-                            <button onclick="openNCBI()" class="bg-rose-600 text-white px-4 rounded-lg hover:bg-rose-700 font-semibold transition">Search</button>
-                        </div>
-                    </div>
+            <!-- Recipe Cheatsheet -->
+            <div class="p-5 bg-sky-50 rounded-xl border border-sky-100 shadow-sm">
+                <h2 class="text-xl font-bold text-sky-900 mb-3">📜 Quick Lab Recipe Cheatsheet</h2>
+                <div class="space-y-2 text-sm text-sky-950">
+                    <p>• <strong>$50\times$ TAE Buffer (1 Liter):</strong> 242g Tris base, 57.1 mL Glacial Acetic Acid, 100 mL 0.5M EDTA (pH 8.0).</p>
+                    <p>• <strong>LB Media (1 Liter):</strong> 10g Tryptone, 5g Yeast Extract, 10g NaCl. (Add 15g Agar for LB Agar).</p>
+                    <p>• <strong>$10\times$ PBS Buffer (1 Liter):</strong> 80g NaCl, 2g KCl, 14.4g $\text{Na}_2\text{HPO}_4$, 2.4g $\text{KH}_2\text{PO}_4$ (pH ~7.4).</p>
                 </div>
             </div>
         </div>
 
     </div>
 
-    <!-- Logic Script -->
+    <!-- JavaScript Logic -->
     <script>
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('tab-' + tab).classList.add('active');
+            
+            document.getElementById('sec-lab').classList.add('hidden');
+            document.getElementById('sec-seq').classList.add('hidden');
+            document.getElementById('sec-ewu').classList.add('hidden');
+            document.getElementById('sec-cite').classList.add('hidden');
+            
+            document.getElementById('sec-' + tab).classList.remove('hidden');
+        }
+
         function setMW() {
             const val = document.getElementById('chemSelect').value;
             if(val) document.getElementById('mw').value = val;
@@ -259,7 +350,6 @@
                 document.getElementById('pcrResult').innerText = "দয়া করে সঠিক Reaction সংখ্যা লিখুন।";
                 return;
             }
-            // Standard 25uL PCR Reaction proportions
             const buffer = (totalVol * 0.1) * n;
             const dntp = (totalVol * 0.04) * n;
             const fPrimer = (totalVol * 0.04) * n;
@@ -290,12 +380,9 @@
                 'P':115.13, 'S':105.09, 'T':119.12, 'W':204.23, 'Y':181.19, 'V':117.15
             };
             let totalMw = 0;
-            for(let char of seq) {
-                totalMw += weights[char] || 0;
-            }
-            totalMw -= (seq.length - 1) * 18.015; // Water loss during peptide bond
+            for(let char of seq) totalMw += weights[char] || 0;
+            totalMw -= (seq.length - 1) * 18.015;
 
-            // Isoelectric point estimate based on basic/acidic residues
             const pos = (seq.match(/[RKH]/g) || []).length;
             const neg = (seq.match(/[DE]/g) || []).length;
             let estPI = 7.0 + (pos - neg) * 0.5;
@@ -317,6 +404,65 @@
         function openNCBI() {
             const term = document.getElementById('ncbiTerm').value.trim();
             if(term) window.open(`https://www.ncbi.nlm.nih.gov/nuccore/?term=${encodeURIComponent(term)}`, '_blank');
+        }
+
+        // EWU CGPA Logic
+        function addCourseRow() {
+            const container = document.getElementById('courseRows');
+            const row = document.createElement('div');
+            row.className = 'grid grid-cols-12 gap-2 mt-2';
+            row.innerHTML = `
+                <input type="text" placeholder="Course Name" class="col-span-5 p-2 border rounded-lg outline-none">
+                <input type="number" placeholder="Credit" class="col-span-3 p-2 border rounded-lg course-credit outline-none" step="0.5" value="3">
+                <select class="col-span-4 p-2 border rounded-lg course-grade outline-none">
+                    <option value="4.0">A (4.0)</option>
+                    <option value="3.7">A- (3.7)</option>
+                    <option value="3.3">B+ (3.3)</option>
+                    <option value="3.0">B (3.0)</option>
+                    <option value="2.7">B- (2.7)</option>
+                    <option value="2.3">C+ (2.3)</option>
+                    <option value="2.0">C (2.0)</option>
+                    <option value="1.7">C- (1.7)</option>
+                    <option value="1.3">D+ (1.3)</option>
+                    <option value="1.0">D (1.0)</option>
+                    <option value="0.0">F (0.0)</option>
+                </select>
+            `;
+            container.appendChild(row);
+        }
+
+        function calcCGPA() {
+            const credits = document.querySelectorAll('.course-credit');
+            const grades = document.querySelectorAll('.course-grade');
+            let totalPts = 0, totalCreds = 0;
+            
+            credits.forEach((cInput, idx) => {
+                const cred = parseFloat(cInput.value) || 0;
+                const g = parseFloat(grades[idx].value) || 0;
+                totalPts += cred * g;
+                totalCreds += cred;
+            });
+
+            if(totalCreds === 0) {
+                document.getElementById('cgpaResult').innerText = "দয়া করে অন্তত ১টি কোর্সের ক্রেডিট ও গ্রেড দিন।";
+                return;
+            }
+            const cgpa = totalPts / totalCreds;
+            document.getElementById('cgpaResult').innerText = `Your GPA/CGPA: ${cgpa.toFixed(2)} (Total Credits: ${totalCreds})`;
+        }
+
+        // Citation Logic
+        function genCite() {
+            const author = document.getElementById('citeAuthor').value.trim();
+            const year = document.getElementById('citeYear').value.trim();
+            const title = document.getElementById('citeTitle').value.trim();
+            const journal = document.getElementById('citeJournal').value.trim();
+            
+            if(!author || !title) {
+                document.getElementById('citeResult').innerText = "দয়া করে অন্তত Author এবং Title দিন।";
+                return;
+            }
+            document.getElementById('citeResult').innerHTML = `${author} (${year || 'n.d.'}). ${title}. <i>${journal || 'Journal'}</i>.`;
         }
     </script>
 </body>
