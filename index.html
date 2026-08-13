@@ -81,15 +81,15 @@
                 </div>
             </div>
 
-            <!-- Tool 2: Dilution (UPDATED FOR BOTH V1 & V2) -->
+            <!-- Tool 2: Dilution (ANY 3 INPUTS FLEXIBLE CALCULATOR) -->
             <div class="p-5 bg-blue-50 dark:bg-gray-700/50 rounded-xl border border-blue-100 dark:border-gray-600 shadow-sm">
                 <h2 class="text-xl font-bold text-blue-900 dark:text-blue-300 mb-2">💧 2. Dilution Calculator (C₁V₁ = C₂V₂)</h2>
-                <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">* V₁ অথবা V₂ এর যেকোনো একটি খালি রাখুন, সেটি স্বয়ংক্রিয়ভাবে বের হয়ে যাবে।</p>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">* C₁, V₁, C₂ অথবা V₂ এর যেকোনো একটি খালি রাখুন, সেটি স্বয়ংক্রিয়ভাবে বের হয়ে যাবে।</p>
                 <div class="space-y-3">
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
                         <div>
                             <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">Stock Conc. (C₁):</label>
-                            <input type="number" id="c1" placeholder="e.g. 10" step="any" class="w-full p-2.5 mt-1 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
+                            <input type="number" id="c1" placeholder="Empty for C₁" step="any" class="w-full p-2.5 mt-1 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">Stock Vol (V₁ mL):</label>
@@ -97,7 +97,7 @@
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">Target Conc. (C₂):</label>
-                            <input type="number" id="c2" placeholder="e.g. 1" step="any" class="w-full p-2.5 mt-1 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
+                            <input type="number" id="c2" placeholder="Empty for C₂" step="any" class="w-full p-2.5 mt-1 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
                         </div>
                         <div>
                             <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">Target Vol (V₂ mL):</label>
@@ -345,39 +345,46 @@
             `;
         }
 
-        // UPDATED DILUTION CALCULATOR FUNCTION (V1 and V2 Flexible)
+        // SMART DILUTION CALCULATOR (Supports C1, V1, C2, V2 Flexible Input)
         function calcDilution() {
             const c1 = parseFloat(document.getElementById('c1').value);
-            const v1Input = parseFloat(document.getElementById('v1').value);
+            const v1 = parseFloat(document.getElementById('v1').value);
             const c2 = parseFloat(document.getElementById('c2').value);
-            const v2Input = parseFloat(document.getElementById('v2').value);
+            const v2 = parseFloat(document.getElementById('v2').value);
             const resultDiv = document.getElementById('dilutionResult');
 
-            if (!c1 || !c2) {
-                resultDiv.innerText = "দয়া করে C₁ এবং C₂ এর মান দিন।";
+            const inputs = [c1, v1, c2, v2];
+            const filledCount = inputs.filter(val => !isNaN(val)).length;
+
+            if (filledCount !== 3) {
+                resultDiv.innerHTML = "<span class='text-red-500 font-semibold'>দয়া করে যেকোনো ৩টি ঘর পূরণ করুন এবং ১টি ঘর ফাঁকা রাখুন।</span>";
                 return;
             }
 
-            // Case 1: Calculate V1 (when V1 is empty, V2 is given)
-            if (isNaN(v1Input) && !isNaN(v2Input)) {
-                const v1 = (c2 * v2Input) / c1;
-                const solvent = v2Input - v1;
+            if (isNaN(v1)) {
+                const resV1 = (c2 * v2) / c1;
+                const solvent = v2 - resV1;
                 resultDiv.innerHTML = `
-                    <p>• Required Stock Vol (V₁): <strong>${v1.toFixed(2)} mL</strong></p>
-                    <p>• Water/Buffer to Add: <strong>${solvent.toFixed(2)} mL</strong> (Total V₂: ${v2Input} mL)</p>
+                    <p>• Required Stock Vol (V₁): <strong>${resV1.toFixed(2)} mL</strong></p>
+                    <p>• Water/Buffer to Add: <strong>${solvent.toFixed(2)} mL</strong> (Total V₂: ${v2} mL)</p>
                 `;
-            } 
-            // Case 2: Calculate V2 (when V2 is empty, V1 is given)
-            else if (!isNaN(v1Input) && isNaN(v2Input)) {
-                const v2 = (c1 * v1Input) / c2;
-                const solvent = v2 - v1Input;
+            } else if (isNaN(v2)) {
+                const resV2 = (c1 * v1) / c2;
+                const solvent = resV2 - v1;
                 resultDiv.innerHTML = `
-                    <p>• Final Target Volume (V₂): <strong>${v2.toFixed(2)} mL</strong></p>
-                    <p>• Water/Buffer to Add: <strong>${solvent.toFixed(2)} mL</strong> (Using V₁: ${v1Input} mL)</p>
+                    <p>• Final Target Volume (V₂): <strong>${resV2.toFixed(2)} mL</strong></p>
+                    <p>• Water/Buffer to Add: <strong>${solvent.toFixed(2)} mL</strong> (Using V₁: ${v1} mL)</p>
                 `;
-            } 
-            else {
-                resultDiv.innerText = "V₁ অথবা V₂ এর যেকোনো একটি ঘর খালি রাখুন (যেটি হিসাব করতে চান)।";
+            } else if (isNaN(c1)) {
+                const resC1 = (c2 * v2) / v1;
+                resultDiv.innerHTML = `
+                    <p>• Required Stock Concentration (C₁): <strong>${resC1.toFixed(2)}</strong></p>
+                `;
+            } else if (isNaN(c2)) {
+                const resC2 = (c1 * v1) / v2;
+                resultDiv.innerHTML = `
+                    <p>• Final Target Concentration (C₂): <strong>${resC2.toFixed(2)}</strong></p>
+                `;
             }
         }
 
@@ -460,39 +467,37 @@
             const water = (totalVol * 0.77) * n;
 
             document.getElementById('pcrResult').innerHTML = `
-                <p><strong>Master Mix for ${n} Reactions (${totalVol * n} &mu;L Total):</strong></p>
                 <p>• 10x Buffer: <strong>${buffer.toFixed(1)} &mu;L</strong></p>
-                <p>• dNTP Mix (10mM): <strong>${dntp.toFixed(1)} &mu;L</strong></p>
-                <p>• Forward Primer (10&mu;M): <strong>${fPrimer.toFixed(1)} &mu;L</strong></p>
-                <p>• Reverse Primer (10&mu;M): <strong>${rPrimer.toFixed(1)} &mu;L</strong></p>
+                <p>• dNTP Mix: <strong>${dntp.toFixed(1)} &mu;L</strong></p>
+                <p>• Forward Primer: <strong>${fPrimer.toFixed(1)} &mu;L</strong></p>
+                <p>• Reverse Primer: <strong>${rPrimer.toFixed(1)} &mu;L</strong></p>
                 <p>• Taq Polymerase: <strong>${taq.toFixed(1)} &mu;L</strong></p>
-                <p>• Nuclease-Free Water: <strong>${water.toFixed(1)} &mu;L</strong></p>
+                <p>• Nuclease-free Water: <strong>${water.toFixed(1)} &mu;L</strong></p>
+                <p class="mt-1 text-xs text-purple-700 dark:text-purple-300 font-semibold">* Excludes DNA template volume.</p>
             `;
         }
 
         function calcProtein() {
             const seq = document.getElementById('protSeq').value.trim().toUpperCase();
-            if (!seq || !/^[ACDEFGHIKLMNPQRSTVWY]+$/.test(seq)) {
-                document.getElementById('protResult').innerHTML = '<span class="text-red-500 font-semibold">সঠিক ১-লেটার Amino Acid সিকোয়েন্স দিন।</span>';
+            if(!seq || !/^[ACDEFGHIKLMNPQRSTVWY]+$/.test(seq)) {
+                document.getElementById('protResult').innerHTML = "<span class='text-red-500'>দয়া করে সঠিক Single-Letter Amino Acid Sequence দিন।</span>";
                 return;
             }
             const weights = {
-                'A':89.09, 'R':174.20, 'N':132.12, 'D':133.10, 'C':121.16, 'E':147.13, 'Q':146.15,
-                'G':75.07, 'H':155.16, 'I':131.17, 'L':131.17, 'K':146.19, 'M':149.21, 'F':165.19,
-                'P':115.13, 'S':105.09, 'T':119.12, 'W':204.23, 'Y':181.19, 'V':117.15
+                'A': 89.09, 'R': 174.20, 'N': 132.12, 'D': 133.10, 'C': 121.16,
+                'E': 147.13, 'Q': 146.15, 'G': 75.07, 'H': 155.16, 'I': 131.17,
+                'L': 131.17, 'K': 146.19, 'M': 149.21, 'F': 165.19, 'P': 115.13,
+                'S': 105.09, 'T': 119.12, 'W': 204.23, 'Y': 181.19, 'V': 117.15
             };
-            let totalMw = 0;
-            for(let char of seq) totalMw += weights[char] || 0;
-            
-            if (seq.length > 1) {
-                totalMw -= (seq.length - 1) * 18.015;
+            let mw = 0;
+            for(let char of seq) {
+                mw += weights[char];
             }
-            
-            const mwKda = totalMw / 1000;
+            mw -= (seq.length - 1) * 18.015; // Water loss during peptide bond formation
 
             document.getElementById('protResult').innerHTML = `
-                <p>• <strong>Amino Acid Length:</strong> ${seq.length} aa</p>
-                <p>• <strong>Estimated Molecular Weight:</strong> ${totalMw.toFixed(2)} Da (~${mwKda.toFixed(2)} kDa)</p>
+                <p>• <strong>Amino Acid Count:</strong> ${seq.length} aa</p>
+                <p>• <strong>Estimated MW:</strong> ${mw.toFixed(2)} Da (${(mw/1000).toFixed(2)} kDa)</p>
             `;
         }
 
@@ -503,14 +508,13 @@
 
         function openNCBI() {
             const term = document.getElementById('ncbiTerm').value.trim();
-            if(term) window.open(`https://www.ncbi.nlm.nih.gov/nucleotide/?term=${encodeURIComponent(term)}`, '_blank');
+            if(term) window.open(`https://www.ncbi.nlm.nih.gov/nuccore/?term=${encodeURIComponent(term)}`, '_blank');
         }
 
         function addCourseRow() {
-            const container = document.getElementById('courseRows');
-            const newRow = document.createElement('div');
-            newRow.className = 'grid grid-cols-12 gap-2 mt-2';
-            newRow.innerHTML = `
+            const div = document.createElement('div');
+            div.className = 'grid grid-cols-12 gap-2 mt-2';
+            div.innerHTML = `
                 <input type="text" placeholder="Course Name" class="col-span-5 p-2 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
                 <input type="number" placeholder="Credit" class="col-span-3 p-2 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 course-credit outline-none" step="0.5" value="3">
                 <select class="col-span-4 p-2 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 course-grade outline-none">
@@ -527,33 +531,31 @@
                     <option value="0.0">F (0.0)</option>
                 </select>
             `;
-            container.appendChild(newRow);
+            document.getElementById('courseRows').appendChild(div);
         }
 
         function calcCGPA() {
             const credits = document.querySelectorAll('.course-credit');
             const grades = document.querySelectorAll('.course-grade');
-            
             let totalCredits = 0;
             let totalPoints = 0;
 
-            for(let i = 0; i < credits.length; i++) {
-                const credit = parseFloat(credits[i].value) || 0;
-                const grade = parseFloat(grades[i].value) || 0;
-                
-                totalCredits += credit;
-                totalPoints += (credit * grade);
+            for(let i=0; i<credits.length; i++) {
+                const c = parseFloat(credits[i].value);
+                const g = parseFloat(grades[i].value);
+                if(!isNaN(c) && !isNaN(g)) {
+                    totalCredits += c;
+                    totalPoints += (c * g);
+                }
             }
 
             if(totalCredits === 0) {
-                document.getElementById('cgpaResult').innerText = "দয়া করে সঠিক ক্রেডিক ও গ্রেড ইনপুট দিন।";
+                document.getElementById('cgpaResult').innerText = "দয়া করে সঠিকভাবে কোর্স তথ্য দিন।";
                 return;
             }
 
             const cgpa = totalPoints / totalCredits;
-            document.getElementById('cgpaResult').innerHTML = `
-                <span>Your calculated CGPA: <strong>${cgpa.toFixed(2)}</strong> (Total Credits: ${totalCredits})</span>
-            `;
+            document.getElementById('cgpaResult').innerText = `Calculated CGPA: ${cgpa.toFixed(2)} (Total Credits: ${totalCredits})`;
         }
 
         function genCite() {
@@ -563,12 +565,11 @@
             const journal = document.getElementById('citeJournal').value.trim();
 
             if(!author || !year || !title || !journal) {
-                document.getElementById('citeResult').innerText = "দয়া করে সমস্ত তথ্য সঠিকবাবে পূরণ করুন।";
+                document.getElementById('citeResult').innerText = "দয়া করে সবকয়টি ফিল্ড পূরণ করুন।";
                 return;
             }
 
-            const citation = `${author} (${year}). ${title}. <em>${journal}</em>.`;
-            document.getElementById('citeResult').innerHTML = citation;
+            document.getElementById('citeResult').innerText = `${author} (${year}). ${title}. ${journal}.`;
         }
     </script>
 </body>
