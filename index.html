@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Biotech Lab & Academic Suite 🧬</title>
+    <title>EWU Biotech & Academic Suite v3.0 🧬</title>
     <!-- Google Bengali Font (Hind Siliguri) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,42 +11,55 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        tailwind.config = {
-            darkMode: 'class',
-        }
+        tailwind.config = { darkMode: 'class' }
     </script>
     <style>
         body { font-family: 'Hind Siliguri', sans-serif; }
         .tab-btn.active { border-bottom: 3px solid #4F46E5; color: #4F46E5; font-weight: 700; }
         .dark .tab-btn.active { border-bottom: 3px solid #818CF8; color: #818CF8; }
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white; color: black; }
+        }
     </style>
 </head>
 <body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100 p-4 md:p-8 transition-colors duration-200">
-    <div class="max-w-4xl mx-auto bg-white dark:bg-gray-800 p-6 md:p-8 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700">
+    <div class="max-w-5xl mx-auto bg-white dark:bg-gray-800 p-6 md:p-8 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700">
         
-        <!-- Header with Dark Mode Toggle -->
-        <div class="flex justify-between items-start mb-6 border-b pb-4 border-gray-200 dark:border-gray-700">
-            <div class="text-left">
-                <h1 class="text-3xl md:text-4xl font-extrabold text-indigo-600 dark:text-indigo-400">🧬 EWU Biotech & Academic Suite</h1>
-                <p class="text-gray-600 dark:text-gray-300 mt-1 text-base font-semibold">East West University - GEB স্টুডেন্টদের জন্য অল-ইন-ওয়ান ড্যাশবোর্ড</p>
+        <!-- Header with Global Search, Print & Dark Mode Toggle -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 border-b pb-4 border-gray-200 dark:border-gray-700 gap-4 no-print">
+            <div>
+                <h1 class="text-3xl md:text-4xl font-extrabold text-indigo-600 dark:text-indigo-400 flex items-center gap-2">
+                    🧬 EWU Biotech Suite <span class="text-xs font-semibold px-2.5 py-0.5 rounded bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200">v3.0</span>
+                </h1>
+                <p class="text-gray-600 dark:text-gray-300 mt-1 text-sm font-semibold">East West University - GEB স্টুডেন্টদের জন্য অল-ইন-ওয়ান ড্যাশবোর্ড</p>
             </div>
-            <button onclick="toggleDarkMode()" class="p-2.5 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 transition" title="Toggle Dark Mode">
-                <span id="darkIcon">🌙</span>
-            </button>
+            
+            <div class="flex items-center gap-2 w-full md:w-auto">
+                <!-- Global Search -->
+                <input type="text" id="globalSearch" onkeyup="searchTools()" placeholder="🔍 টুল খুঁজুন (e.g. Primer, Viability)..." class="p-2 border rounded-xl text-sm bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 w-full md:w-64 outline-none focus:ring-2 focus:ring-indigo-500">
+                <!-- Print Button -->
+                <button onclick="window.print()" class="p-2.5 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 transition" title="Print Page / Save PDF">🖨️</button>
+                <!-- Dark Mode -->
+                <button onclick="toggleDarkMode()" class="p-2.5 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 transition" title="Toggle Dark Mode">
+                    <span id="darkIcon">🌙</span>
+                </button>
+            </div>
         </div>
 
-        <!-- Tab Navigation -->
-        <div class="flex border-b mb-6 overflow-x-auto text-sm md:text-base border-gray-200 dark:border-gray-700">
-            <button onclick="switchTab('lab')" id="tab-lab" class="tab-btn active px-4 py-2 font-semibold text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400">🧪 Lab Calculators</button>
+        <!-- Navigation Tabs -->
+        <div class="flex border-b mb-6 overflow-x-auto text-sm md:text-base border-gray-200 dark:border-gray-700 no-print">
+            <button onclick="switchTab('lab')" id="tab-lab" class="tab-btn active px-4 py-2 font-semibold text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400">🧪 Basic Lab</button>
+            <button onclick="switchTab('advlab')" id="tab-advlab" class="tab-btn px-4 py-2 font-semibold text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400">🔬 Advanced Lab</button>
             <button onclick="switchTab('seq')" id="tab-seq" class="tab-btn px-4 py-2 font-semibold text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400">🧬 Bio-Tools</button>
-            <button onclick="switchTab('ewu')" id="tab-ewu" class="tab-btn px-4 py-2 font-semibold text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400">🎓 EWU CGPA</button>
+            <button onclick="switchTab('ewu')" id="tab-ewu" class="tab-btn px-4 py-2 font-semibold text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400">🎓 Academic & Safety</button>
             <button onclick="switchTab('cite')" id="tab-cite" class="tab-btn px-4 py-2 font-semibold text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400">📚 Citation & Recipes</button>
         </div>
 
-        <!-- SECTION 1: LAB CALCULATORS -->
-        <div id="sec-lab" class="space-y-6">
-            <!-- Tool 1: Molarity -->
-            <div class="p-5 bg-indigo-50 dark:bg-gray-700/50 rounded-xl border border-indigo-100 dark:border-gray-600 shadow-sm">
+        <!-- ==================== SECTION 1: BASIC LAB CALCULATORS ==================== -->
+        <div id="sec-lab" class="space-y-6 tool-section">
+            <!-- Molarity -->
+            <div class="tool-card p-5 bg-indigo-50 dark:bg-gray-700/50 rounded-xl border border-indigo-100 dark:border-gray-600 shadow-sm" data-keywords="molarity chemical mass molecular weight">
                 <h2 class="text-xl font-bold text-indigo-900 dark:text-indigo-300 mb-3">🧪 1. Molarity Calculator</h2>
                 <div class="space-y-3">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -81,70 +94,43 @@
                 </div>
             </div>
 
-            <!-- Tool 2: Dilution -->
-            <div class="p-5 bg-blue-50 dark:bg-gray-700/50 rounded-xl border border-blue-100 dark:border-gray-600 shadow-sm">
+            <!-- Dilution -->
+            <div class="tool-card p-5 bg-blue-50 dark:bg-gray-700/50 rounded-xl border border-blue-100 dark:border-gray-600 shadow-sm" data-keywords="dilution concentration c1v1 c2v2 stock solution">
                 <h2 class="text-xl font-bold text-blue-900 dark:text-blue-300 mb-2">💧 2. Dilution Calculator (C₁V₁ = C₂V₂)</h2>
-                <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">* C₁, V₁, C₂ অথবা V₂ এর যেকোনো একটি খালি রাখুন, সেটি স্বয়ংক্রিয়ভাবে বের হয়ে যাবে।</p>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">* যেকোনো ৩টি ইনপুট দিন, বাকি ১টি খালি রাখুন।</p>
                 <div class="space-y-3">
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                        <div>
-                            <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">Stock Conc. (C₁):</label>
-                            <input type="number" id="c1" placeholder="Empty for C₁" step="any" class="w-full p-2.5 mt-1 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">Stock Vol (V₁ mL):</label>
-                            <input type="number" id="v1" placeholder="Empty for V₁" step="any" class="w-full p-2.5 mt-1 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">Target Conc. (C₂):</label>
-                            <input type="number" id="c2" placeholder="Empty for C₂" step="any" class="w-full p-2.5 mt-1 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">Target Vol (V₂ mL):</label>
-                            <input type="number" id="v2" placeholder="Empty for V₂" step="any" class="w-full p-2.5 mt-1 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
-                        </div>
+                        <input type="number" id="c1" placeholder="Stock Conc (C₁)" step="any" class="p-2.5 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
+                        <input type="number" id="v1" placeholder="Stock Vol (V₁ mL)" step="any" class="p-2.5 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
+                        <input type="number" id="c2" placeholder="Target Conc (C₂)" step="any" class="p-2.5 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
+                        <input type="number" id="v2" placeholder="Target Vol (V₂ mL)" step="any" class="p-2.5 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
                     </div>
                     <button onclick="calcDilution()" class="w-full bg-blue-600 text-white py-2.5 rounded-lg hover:bg-blue-700 font-semibold transition">Calculate Dilution</button>
                     <div id="dilutionResult" class="mt-2 text-blue-950 dark:text-blue-200 font-medium"></div>
                 </div>
             </div>
 
-            <!-- NEW TOOL: Agarose Gel Calculator -->
-            <div class="p-5 bg-green-50 dark:bg-gray-700/50 rounded-xl border border-green-100 dark:border-gray-600 shadow-sm">
+            <!-- Agarose Gel Prep -->
+            <div class="tool-card p-5 bg-green-50 dark:bg-gray-700/50 rounded-xl border border-green-100 dark:border-gray-600 shadow-sm" data-keywords="agarose gel percentage buffer electrophoresis">
                 <h2 class="text-xl font-bold text-green-900 dark:text-green-300 mb-3">🧫 3. Agarose Gel Prep Calculator</h2>
                 <div class="space-y-3">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Gel Concentration (%):</label>
-                            <input type="number" id="gelPct" placeholder="e.g. 1.0" step="0.1" class="w-full p-2.5 mt-1 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Gel Volume (mL):</label>
-                            <input type="number" id="gelVol" placeholder="e.g. 50" step="1" class="w-full p-2.5 mt-1 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
-                        </div>
+                        <input type="number" id="gelPct" placeholder="Gel Concentration (%) e.g. 1.0" step="0.1" class="p-2.5 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
+                        <input type="number" id="gelVol" placeholder="Gel Volume (mL) e.g. 50" step="1" class="p-2.5 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
                     </div>
                     <button onclick="calcGel()" class="w-full bg-green-600 text-white py-2.5 rounded-lg hover:bg-green-700 font-semibold transition">Calculate Agarose Needed</button>
                     <div id="gelResult" class="mt-2 text-green-950 dark:text-green-200 font-medium"></div>
                 </div>
             </div>
 
-            <!-- NEW TOOL: Centrifuge RPM <-> RCF Converter -->
-            <div class="p-5 bg-orange-50 dark:bg-gray-700/50 rounded-xl border border-orange-100 dark:border-gray-600 shadow-sm">
+            <!-- Centrifuge RPM/RCF -->
+            <div class="tool-card p-5 bg-orange-50 dark:bg-gray-700/50 rounded-xl border border-orange-100 dark:border-gray-600 shadow-sm" data-keywords="centrifuge rpm rcf g-force rotor speed">
                 <h2 class="text-xl font-bold text-orange-900 dark:text-orange-300 mb-3">🌀 4. Centrifuge Converter (RPM ↔ RCF/g)</h2>
                 <div class="space-y-3">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                        <div>
-                            <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">Radius (cm):</label>
-                            <input type="number" id="cfRadius" value="10" step="0.1" class="w-full p-2.5 mt-1 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">Speed (RPM):</label>
-                            <input type="number" id="cfRPM" placeholder="e.g. 10000" class="w-full p-2.5 mt-1 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">Force (RCF / ×g):</label>
-                            <input type="number" id="cfRCF" placeholder="e.g. 11200" class="w-full p-2.5 mt-1 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
-                        </div>
+                        <input type="number" id="cfRadius" value="10" step="0.1" placeholder="Radius (cm)" class="p-2.5 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
+                        <input type="number" id="cfRPM" placeholder="Speed (RPM)" class="p-2.5 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
+                        <input type="number" id="cfRCF" placeholder="Force (RCF / ×g)" class="p-2.5 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
                     </div>
                     <div class="flex gap-3">
                         <button onclick="rpmToRcf()" class="w-1/2 bg-orange-600 text-white py-2.5 rounded-lg hover:bg-orange-700 font-semibold transition">RPM ➔ RCF</button>
@@ -153,64 +139,128 @@
                     <div id="cfResult" class="mt-2 text-orange-950 dark:text-orange-200 font-medium"></div>
                 </div>
             </div>
+        </div>
 
-            <!-- Tool 5: Purity -->
-            <div class="p-5 bg-amber-50 dark:bg-gray-700/50 rounded-xl border border-amber-100 dark:border-gray-600 shadow-sm">
-                <h2 class="text-xl font-bold text-amber-900 dark:text-amber-300 mb-3">📊 5. DNA/RNA Purity Check (A₂₆₀/A₂₈₀)</h2>
+        <!-- ==================== SECTION 2: ADVANCED LAB CALCULATORS ==================== -->
+        <div id="sec-advlab" class="space-y-6 tool-section hidden">
+            <!-- Antibiotic Working Conc -->
+            <div class="tool-card p-5 bg-rose-50 dark:bg-gray-700/50 rounded-xl border border-rose-100 dark:border-gray-600 shadow-sm" data-keywords="antibiotic ampicillin kanamycin concentration stock volume">
+                <h2 class="text-xl font-bold text-rose-900 dark:text-rose-300 mb-3">💊 1. Antibiotic / Media Addition Calculator</h2>
                 <div class="space-y-3">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Absorbance at 260 nm (A₂₆₀):</label>
-                            <input type="number" id="a260" placeholder="e.g. 0.9" step="0.01" class="w-full p-2.5 mt-1 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Absorbance at 280 nm (A₂₈₀):</label>
-                            <input type="number" id="a280" placeholder="e.g. 0.5" step="0.01" class="w-full p-2.5 mt-1 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
-                        </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <input type="number" id="abStock" placeholder="Stock Conc. (mg/mL) e.g. 100" class="p-2.5 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
+                        <input type="number" id="abWork" placeholder="Target Conc. (µg/mL) e.g. 100" class="p-2.5 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
+                        <input type="number" id="abVol" placeholder="Media Volume (mL) e.g. 500" class="p-2.5 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
                     </div>
-                    <button onclick="calcPurity()" class="w-full bg-amber-600 text-white py-2.5 rounded-lg hover:bg-amber-700 font-semibold transition">Check Purity</button>
-                    <div id="purityResult" class="mt-2 text-amber-950 dark:text-amber-200 font-medium"></div>
+                    <button onclick="calcAntibiotic()" class="w-full bg-rose-600 text-white py-2.5 rounded-lg hover:bg-rose-700 font-semibold transition">Calculate Volume to Add</button>
+                    <div id="abResult" class="mt-2 text-rose-950 dark:text-rose-200 font-medium"></div>
                 </div>
             </div>
 
-            <!-- Tool 6: PCR -->
-            <div class="p-5 bg-purple-50 dark:bg-gray-700/50 rounded-xl border border-purple-100 dark:border-gray-600 shadow-sm">
-                <h2 class="text-xl font-bold text-purple-900 dark:text-purple-300 mb-3">🧫 6. PCR Master Mix Calculator</h2>
+            <!-- Cell Viability / Hemocytometer -->
+            <div class="tool-card p-5 bg-violet-50 dark:bg-gray-700/50 rounded-xl border border-violet-100 dark:border-gray-600 shadow-sm" data-keywords="cell viability hemocytometer trypan blue live dead cell culture concentration">
+                <h2 class="text-xl font-bold text-violet-900 dark:text-violet-300 mb-3">🧫 2. Cell Viability & Hemocytometer Counter</h2>
                 <div class="space-y-3">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Number of Reactions:</label>
-                            <input type="number" id="pcrRxns" placeholder="e.g. 10" step="1" class="w-full p-2.5 mt-1 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Vol per Reaction (&mu;L):</label>
-                            <input type="number" id="pcrVol" value="25" step="1" class="w-full p-2.5 mt-1 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
-                        </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <input type="number" id="liveCells" placeholder="Live Cells Count" class="p-2.5 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
+                        <input type="number" id="deadCells" placeholder="Dead Cells Count" class="p-2.5 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
+                        <input type="number" id="squares" value="4" placeholder="Squares Counted (Default: 4)" class="p-2.5 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
                     </div>
-                    <button onclick="calcPCR()" class="w-full bg-purple-600 text-white py-2.5 rounded-lg hover:bg-purple-700 font-semibold transition">Calculate Master Mix</button>
-                    <div id="pcrResult" class="mt-2 text-purple-950 dark:text-purple-200 font-medium space-y-1"></div>
+                    <button onclick="calcViability()" class="w-full bg-violet-600 text-white py-2.5 rounded-lg hover:bg-violet-700 font-semibold transition">Calculate Cell Density & Viability</button>
+                    <div id="viabilityResult" class="mt-2 text-violet-950 dark:text-violet-200 font-medium"></div>
+                </div>
+            </div>
+
+            <!-- Beer-Lambert Law Conc -->
+            <div class="tool-card p-5 bg-amber-50 dark:bg-gray-700/50 rounded-xl border border-amber-100 dark:border-gray-600 shadow-sm" data-keywords="beer lambert spectrophotometer absorbance extinction coefficient concentration">
+                <h2 class="text-xl font-bold text-amber-900 dark:text-amber-300 mb-3">📐 3. Beer-Lambert Law Concentration (A = ε × c × l)</h2>
+                <div class="space-y-3">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <input type="number" id="blAbs" placeholder="Absorbance (A)" step="any" class="p-2.5 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
+                        <input type="number" id="blExt" placeholder="Extinction Coeff. (ε) L/(mol·cm)" step="any" class="p-2.5 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
+                        <input type="number" id="blPath" value="1" placeholder="Path Length (cm) [Default 1]" step="any" class="p-2.5 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
+                    </div>
+                    <button onclick="calcBeerLambert()" class="w-full bg-amber-600 text-white py-2.5 rounded-lg hover:bg-amber-700 font-semibold transition">Calculate Concentration (M)</button>
+                    <div id="blResult" class="mt-2 text-amber-950 dark:text-amber-200 font-medium"></div>
+                </div>
+            </div>
+
+            <!-- Unit Converter -->
+            <div class="tool-card p-5 bg-yellow-50 dark:bg-gray-700/50 rounded-xl border border-yellow-100 dark:border-gray-600 shadow-sm" data-keywords="unit converter mass volume gram milligram microgram liter milliliter microliter">
+                <h2 class="text-xl font-bold text-yellow-900 dark:text-yellow-300 mb-3">🔄 4. Molecular Lab Unit Converter</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Mass Converter -->
+                    <div class="p-3 bg-white dark:bg-gray-800 rounded-lg border border-yellow-200 dark:border-gray-600">
+                        <label class="block text-xs font-bold mb-1">Mass Conversion:</label>
+                        <div class="flex gap-2">
+                            <input type="number" id="unitMassVal" placeholder="Value" oninput="convertMass()" class="w-1/2 p-2 border rounded text-sm bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 outline-none">
+                            <select id="unitMassFrom" onchange="convertMass()" class="w-1/2 p-2 border rounded text-sm bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 outline-none">
+                                <option value="g">Grams (g)</option>
+                                <option value="mg">Milligrams (mg)</option>
+                                <option value="ug">Micrograms (µg)</option>
+                                <option value="ng">Nanograms (ng)</option>
+                            </select>
+                        </div>
+                        <div id="massConvResult" class="mt-2 text-xs font-semibold text-gray-700 dark:text-gray-300"></div>
+                    </div>
+                    <!-- Volume Converter -->
+                    <div class="p-3 bg-white dark:bg-gray-800 rounded-lg border border-yellow-200 dark:border-gray-600">
+                        <label class="block text-xs font-bold mb-1">Volume Conversion:</label>
+                        <div class="flex gap-2">
+                            <input type="number" id="unitVolVal" placeholder="Value" oninput="convertVol()" class="w-1/2 p-2 border rounded text-sm bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 outline-none">
+                            <select id="unitVolFrom" onchange="convertVol()" class="w-1/2 p-2 border rounded text-sm bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 outline-none">
+                                <option value="L">Liters (L)</option>
+                                <option value="mL">Milliliters (mL)</option>
+                                <option value="uL">Microliters (µL)</option>
+                            </select>
+                        </div>
+                        <div id="volConvResult" class="mt-2 text-xs font-semibold text-gray-700 dark:text-gray-300"></div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- SECTION 2: BIO-TOOLS -->
-        <div id="sec-seq" class="space-y-6 hidden">
-            <!-- DNA Sequence Analyzer -->
-            <div class="p-5 bg-emerald-50 dark:bg-gray-700/50 rounded-xl border border-emerald-100 dark:border-gray-600 shadow-sm">
-                <h2 class="text-xl font-bold text-emerald-900 dark:text-emerald-300 mb-3">🧬 DNA Sequence Analyzer & Converter</h2>
+        <!-- ==================== SECTION 3: BIOINFORMATICS TOOLS ==================== -->
+        <div id="sec-seq" class="space-y-6 tool-section hidden">
+            <!-- Primer Designer Assistant -->
+            <div class="tool-card p-5 bg-sky-50 dark:bg-gray-700/50 rounded-xl border border-sky-100 dark:border-gray-600 shadow-sm" data-keywords="primer design pcr forward reverse melting temperature tm gc content">
+                <h2 class="text-xl font-bold text-sky-900 dark:text-sky-300 mb-3">🧬 1. PCR Primer Design Assistant</h2>
                 <div class="space-y-3">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">DNA Sequence (5' to 3'):</label>
-                        <input type="text" id="dnaSeq" placeholder="e.g. ATGCGATCG" class="w-full p-2.5 mt-1 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 uppercase outline-none">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Target DNA Sequence (5' to 3'):</label>
+                        <input type="text" id="primerTarget" placeholder="e.g. ATGCGATCGATCGATCGATCGATC" class="w-full p-2.5 mt-1 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 uppercase outline-none">
                     </div>
-                    <button onclick="calcDNA()" class="w-full bg-emerald-600 text-white py-2.5 rounded-lg hover:bg-emerald-700 font-semibold transition">Analyze Sequence</button>
-                    <div id="dnaResult" class="mt-3 text-emerald-950 dark:text-emerald-200 space-y-2 font-medium"></div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <input type="number" id="primerLen" value="20" placeholder="Primer Length (bp)" class="p-2.5 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
+                        <button onclick="designPrimers()" class="bg-sky-600 text-white py-2.5 rounded-lg hover:bg-sky-700 font-semibold transition">Suggest Primers</button>
+                    </div>
+                    <div id="primerResult" class="mt-2 text-sky-950 dark:text-sky-200 font-medium space-y-1"></div>
                 </div>
             </div>
 
-            <!-- DNA Alignment Tool -->
-            <div class="p-5 bg-lime-50 dark:bg-gray-700/50 rounded-xl border border-lime-100 dark:border-gray-600 shadow-sm">
-                <h2 class="text-xl font-bold text-lime-900 dark:text-lime-300 mb-3">⚡ DNA Pairwise Identity Matcher</h2>
+            <!-- Restriction Site Finder -->
+            <div class="tool-card p-5 bg-emerald-50 dark:bg-gray-700/50 rounded-xl border border-emerald-100 dark:border-gray-600 shadow-sm" data-keywords="restriction site enzyme ecori hindiii bamhi xhoi cut site plasmid">
+                <h2 class="text-xl font-bold text-emerald-900 dark:text-emerald-300 mb-3">✂️ 2. Restriction Enzyme Cut Site Finder</h2>
+                <div class="space-y-3">
+                    <input type="text" id="restrictSeq" placeholder="Input DNA Sequence (e.g. GAATTCGAAGCTTGGATCC)" class="w-full p-2.5 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 uppercase outline-none">
+                    <button onclick="findRestrictionSites()" class="w-full bg-emerald-600 text-white py-2.5 rounded-lg hover:bg-emerald-700 font-semibold transition">Find Cut Sites</button>
+                    <div id="restrictResult" class="mt-2 text-emerald-950 dark:text-emerald-200 font-medium"></div>
+                </div>
+            </div>
+
+            <!-- Codon Translation & ORF -->
+            <div class="tool-card p-5 bg-teal-50 dark:bg-gray-700/50 rounded-xl border border-teal-100 dark:border-gray-600 shadow-sm" data-keywords="codon translation orf open reading frame amino acid protein genetic code">
+                <h2 class="text-xl font-bold text-teal-900 dark:text-teal-300 mb-3">🔄 3. Codon Translation (DNA ➔ Protein)</h2>
+                <div class="space-y-3">
+                    <input type="text" id="translateSeq" placeholder="Input Coding DNA (e.g. ATGGCCATTGTAATGTGA)" class="w-full p-2.5 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 uppercase outline-none">
+                    <button onclick="translateDNA()" class="w-full bg-teal-600 text-white py-2.5 rounded-lg hover:bg-teal-700 font-semibold transition">Translate Sequence</button>
+                    <div id="translateResult" class="mt-2 text-teal-950 dark:text-teal-200 font-medium font-mono text-sm break-all"></div>
+                </div>
+            </div>
+
+            <!-- DNA Pairwise Alignment -->
+            <div class="tool-card p-5 bg-lime-50 dark:bg-gray-700/50 rounded-xl border border-lime-100 dark:border-gray-600 shadow-sm" data-keywords="dna alignment matcher identity percent blast similarity">
+                <h2 class="text-xl font-bold text-lime-900 dark:text-lime-300 mb-3">⚡ 4. DNA Pairwise Identity Matcher</h2>
                 <div class="space-y-3">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                         <input type="text" id="alignSeq1" placeholder="Seq 1: e.g. ATGCGATC" class="p-2.5 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 uppercase outline-none">
@@ -220,110 +270,41 @@
                     <div id="alignResult" class="mt-2 text-lime-950 dark:text-lime-200 font-medium"></div>
                 </div>
             </div>
-
-            <!-- Protein Calc -->
-            <div class="p-5 bg-teal-50 dark:bg-gray-700/50 rounded-xl border border-teal-100 dark:border-gray-600 shadow-sm">
-                <h2 class="text-xl font-bold text-teal-900 dark:text-teal-300 mb-3">🔬 Protein MW Calculator</h2>
-                <div class="space-y-3">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Amino Acid Sequence (1-Letter Code):</label>
-                        <input type="text" id="protSeq" placeholder="e.g. MVLSPADKTN" class="w-full p-2.5 mt-1 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 uppercase outline-none">
-                    </div>
-                    <button onclick="calcProtein()" class="w-full bg-teal-600 text-white py-2.5 rounded-lg hover:bg-teal-700 font-semibold transition">Calculate Protein Params</button>
-                    <div id="protResult" class="mt-2 text-teal-950 dark:text-teal-200 font-medium"></div>
-                </div>
-            </div>
-
-            <!-- Quick Linker -->
-            <div class="p-5 bg-rose-50 dark:bg-gray-700/50 rounded-xl border border-rose-100 dark:border-gray-600 shadow-sm">
-                <h2 class="text-xl font-bold text-rose-900 dark:text-rose-300 mb-3">🔗 RCSB PDB & NCBI Quick Linker</h2>
-                <div class="space-y-3">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">RCSB PDB ID (4 characters):</label>
-                            <div class="flex gap-2 mt-1">
-                                <input type="text" id="pdbId" placeholder="e.g. 1TRZ" maxlength="4" class="w-full p-2.5 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 uppercase outline-none">
-                                <button onclick="openPDB()" class="bg-rose-600 text-white px-4 rounded-lg hover:bg-rose-700 font-semibold transition">Open</button>
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">NCBI Nucleotide Search Term:</label>
-                            <div class="flex gap-2 mt-1">
-                                <input type="text" id="ncbiTerm" placeholder="e.g. Insulin human" class="w-full p-2.5 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
-                                <button onclick="openNCBI()" class="bg-rose-600 text-white px-4 rounded-lg hover:bg-rose-700 font-semibold transition">Search</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
 
-        <!-- SECTION 3: EWU CGPA CALCULATOR & PLANNER -->
-        <div id="sec-ewu" class="space-y-6 hidden">
-            <!-- EWU CGPA Calculator -->
-            <div class="p-5 bg-cyan-50 dark:bg-gray-700/50 rounded-xl border border-cyan-100 dark:border-gray-600 shadow-sm">
-                <h2 class="text-xl font-bold text-cyan-900 dark:text-cyan-300 mb-2">🎓 EWU Grading System CGPA Calculator</h2>
-                <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">A=4.0, A-=3.7, B+=3.3, B=3.0, B-=2.7, C+=2.3, C=2.0, C-=1.7, D+=1.3, D=1.0, F=0.0</p>
-                
-                <div id="courseRows" class="space-y-3">
-                    <div class="grid grid-cols-12 gap-2">
-                        <input type="text" placeholder="Course Name (e.g. GEB101)" class="col-span-5 p-2 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
-                        <input type="number" placeholder="Credit" class="col-span-3 p-2 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 course-credit outline-none" step="0.5" value="3">
-                        <select class="col-span-4 p-2 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 course-grade outline-none">
-                            <option value="4.0">A (4.0)</option>
-                            <option value="3.7">A- (3.7)</option>
-                            <option value="3.3">B+ (3.3)</option>
-                            <option value="3.0">B (3.0)</option>
-                            <option value="2.7">B- (2.7)</option>
-                            <option value="2.3">C+ (2.3)</option>
-                            <option value="2.0">C (2.0)</option>
-                            <option value="1.7">C- (1.7)</option>
-                            <option value="1.3">D+ (1.3)</option>
-                            <option value="1.0">D (1.0)</option>
-                            <option value="0.0">F (0.0)</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="flex gap-3 mt-4">
-                    <button onclick="addCourseRow()" class="bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-4 py-2 rounded-lg font-semibold hover:bg-gray-300 dark:hover:bg-gray-500 transition">+ Add Course</button>
-                    <button onclick="calcCGPA()" class="bg-cyan-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-cyan-700 transition">Calculate CGPA</button>
-                </div>
-                <div id="cgpaResult" class="mt-4 text-cyan-950 dark:text-cyan-200 font-bold text-xl"></div>
-            </div>
-
-            <!-- NEW TOOL: Target CGPA Planner -->
-            <div class="p-5 bg-sky-50 dark:bg-gray-700/50 rounded-xl border border-sky-100 dark:border-gray-600 shadow-sm">
-                <h2 class="text-xl font-bold text-sky-900 dark:text-sky-300 mb-3">🎯 Target CGPA Planner</h2>
+        <!-- ==================== SECTION 4: EWU ACADEMIC & LAB SAFETY ==================== -->
+        <div id="sec-ewu" class="space-y-6 tool-section hidden">
+            <!-- Target CGPA Planner -->
+            <div class="tool-card p-5 bg-cyan-50 dark:bg-gray-700/50 rounded-xl border border-cyan-100 dark:border-gray-600 shadow-sm" data-keywords="ewu cgpa planner target gpa gpa calculator credit">
+                <h2 class="text-xl font-bold text-cyan-900 dark:text-cyan-300 mb-3">🎯 Target CGPA Planner</h2>
                 <div class="space-y-3">
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                        <div>
-                            <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">Current CGPA:</label>
-                            <input type="number" id="currCGPA" placeholder="e.g. 3.25" step="0.01" class="w-full p-2.5 mt-1 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">Completed Credits:</label>
-                            <input type="number" id="completedCredits" placeholder="e.g. 60" step="1" class="w-full p-2.5 mt-1 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">Target CGPA:</label>
-                            <input type="number" id="targetCGPA" placeholder="e.g. 3.50" step="0.01" class="w-full p-2.5 mt-1 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">Remaining Credits:</label>
-                            <input type="number" id="remainingCredits" placeholder="e.g. 80" step="1" class="w-full p-2.5 mt-1 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
-                        </div>
+                        <input type="number" id="currCGPA" placeholder="Current CGPA" step="0.01" class="p-2.5 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
+                        <input type="number" id="completedCredits" placeholder="Done Credits" step="1" class="p-2.5 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
+                        <input type="number" id="targetCGPA" placeholder="Target CGPA" step="0.01" class="p-2.5 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
+                        <input type="number" id="remainingCredits" placeholder="Left Credits" step="1" class="p-2.5 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
                     </div>
-                    <button onclick="calcTargetGPA()" class="w-full bg-sky-600 text-white py-2.5 rounded-lg hover:bg-sky-700 font-semibold transition">Calculate Required GPA</button>
-                    <div id="targetResult" class="mt-2 text-sky-950 dark:text-sky-200 font-medium"></div>
+                    <button onclick="calcTargetGPA()" class="w-full bg-cyan-600 text-white py-2.5 rounded-lg hover:bg-cyan-700 font-semibold transition">Calculate Required GPA</button>
+                    <div id="targetResult" class="mt-2 text-cyan-950 dark:text-cyan-200 font-medium"></div>
+                </div>
+            </div>
+
+            <!-- Lab Safety Quiz / Flashcard -->
+            <div class="tool-card p-5 bg-rose-50 dark:bg-gray-700/50 rounded-xl border border-rose-100 dark:border-gray-600 shadow-sm" data-keywords="lab safety hazard symbols quiz flashcards biohazard toxic corrosive">
+                <h2 class="text-xl font-bold text-rose-900 dark:text-rose-300 mb-3">⚠️ Lab Safety Hazard Symbol Flashcards</h2>
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-xl border border-rose-200 dark:border-gray-600 text-center">
+                    <div id="safetySymbol" class="text-6xl mb-2">☣️</div>
+                    <h3 id="safetyName" class="text-xl font-bold text-rose-700 dark:text-rose-400">Biohazard</h3>
+                    <p id="safetyDesc" class="text-sm text-gray-600 dark:text-gray-300 mt-1">Biological agents that pose a threat to the health of living organisms, primarily humans.</p>
+                    <button onclick="nextSafetyCard()" class="mt-4 px-5 py-2 bg-rose-600 text-white rounded-lg hover:bg-rose-700 text-sm font-semibold transition">Next Symbol ➔</button>
                 </div>
             </div>
         </div>
 
-        <!-- SECTION 4: CITATION & RECIPES -->
-        <div id="sec-cite" class="space-y-6 hidden">
+        <!-- ==================== SECTION 5: CITATION & RECIPES ==================== -->
+        <div id="sec-cite" class="space-y-6 tool-section hidden">
             <!-- APA Citation Generator -->
-            <div class="p-5 bg-stone-50 dark:bg-gray-700/50 rounded-xl border border-stone-200 dark:border-gray-600 shadow-sm">
+            <div class="tool-card p-5 bg-stone-50 dark:bg-gray-700/50 rounded-xl border border-stone-200 dark:border-gray-600 shadow-sm" data-keywords="apa citation generator reference lab report journal">
                 <h2 class="text-xl font-bold text-stone-900 dark:text-stone-300 mb-3">📖 Lab Report APA Citation Generator</h2>
                 <div class="space-y-3">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -331,16 +312,16 @@
                         <input type="text" id="citeYear" placeholder="Year (e.g. 1953)" class="p-2.5 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <input type="text" id="citeTitle" placeholder="Article Title (e.g. Molecular structure of nucleic acids)" class="p-2.5 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
-                        <input type="text" id="citeJournal" placeholder="Journal Name (e.g. Nature)" class="p-2.5 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
+                        <input type="text" id="citeTitle" placeholder="Article Title" class="p-2.5 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
+                        <input type="text" id="citeJournal" placeholder="Journal Name" class="p-2.5 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
                     </div>
                     <button onclick="genCite()" class="w-full bg-stone-700 text-white py-2.5 rounded-lg hover:bg-stone-800 font-semibold transition">Generate Reference</button>
                     <div id="citeResult" class="mt-2 p-3 bg-white dark:bg-gray-800 border dark:border-gray-600 rounded-lg text-stone-900 dark:text-stone-200 font-serif italic"></div>
                 </div>
             </div>
 
-            <!-- Recipe Cheatsheet -->
-            <div class="p-5 bg-sky-50 dark:bg-gray-700/50 rounded-xl border border-sky-100 dark:border-gray-600 shadow-sm">
+            <!-- Lab Recipes Cheatsheet -->
+            <div class="tool-card p-5 bg-sky-50 dark:bg-gray-700/50 rounded-xl border border-sky-100 dark:border-gray-600 shadow-sm" data-keywords="recipe tae buffer lb media pbs buffer solution recipe cheatsheet">
                 <h2 class="text-xl font-bold text-sky-900 dark:text-sky-300 mb-3">📜 Quick Lab Recipe Cheatsheet</h2>
                 <div class="space-y-2 text-sm text-sky-950 dark:text-sky-200">
                     <p>• <strong>50x TAE Buffer (1 Liter):</strong> 242g Tris base, 57.1 mL Glacial Acetic Acid, 100 mL 0.5M EDTA (pH 8.0).</p>
@@ -350,8 +331,8 @@
             </div>
         </div>
 
-        <!-- FOOTER / DEVELOPER INFO -->
-        <footer class="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700 text-center">
+        <!-- FOOTER -->
+        <footer class="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700 text-center no-print">
             <p class="text-gray-600 dark:text-gray-400 text-sm">
                 Developed & Maintained with ❤️ by 
                 <span class="font-bold text-indigo-600 dark:text-indigo-400">Siddhartha Roy</span>
@@ -359,43 +340,49 @@
             <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
                 Department of Genetic Engineering & Biotechnology, East West University
             </p>
-            
-            <div class="mt-3 flex flex-col items-center gap-1.5">
-                <a href="https://facebook.com/siddharth3roy" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-semibold hover:bg-blue-700 transition shadow-sm">
-                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                    Connect on Facebook
-                </a>
-                <span class="text-xs font-mono text-gray-500 dark:text-gray-400">FB ID: @siddharth3roy</span>
-            </div>
         </footer>
 
     </div>
 
-    <!-- JavaScript Logic -->
+    <!-- JavaScript Functions -->
     <script>
+        // Dark Mode Toggle
         function toggleDarkMode() {
             document.documentElement.classList.toggle('dark');
             const isDark = document.documentElement.classList.contains('dark');
             document.getElementById('darkIcon').innerText = isDark ? '☀️' : '🌙';
         }
 
+        // Tab Switching
         function switchTab(tab) {
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById('tab-' + tab).classList.add('active');
             
-            document.getElementById('sec-lab').classList.add('hidden');
-            document.getElementById('sec-seq').classList.add('hidden');
-            document.getElementById('sec-ewu').classList.add('hidden');
-            document.getElementById('sec-cite').classList.add('hidden');
-            
+            document.querySelectorAll('.tool-section').forEach(sec => sec.classList.add('hidden'));
             document.getElementById('sec-' + tab).classList.remove('hidden');
         }
 
-        function copyText(text) {
-            navigator.clipboard.writeText(text);
-            alert("কপি করা হয়েছে!");
+        // Global Search Bar
+        function searchTools() {
+            const q = document.getElementById('globalSearch').value.toLowerCase().trim();
+            if(!q) {
+                document.querySelectorAll('.tool-card').forEach(c => c.classList.remove('hidden'));
+                return;
+            }
+            // Show all sections during search
+            document.querySelectorAll('.tool-section').forEach(sec => sec.classList.remove('hidden'));
+            document.querySelectorAll('.tool-card').forEach(card => {
+                const keywords = card.getAttribute('data-keywords') || '';
+                const text = card.innerText.toLowerCase();
+                if(keywords.includes(q) || text.includes(q)) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
         }
 
+        // --- BASIC LAB JS ---
         function setMW() {
             const val = document.getElementById('chemSelect').value;
             if(val) document.getElementById('mw').value = val;
@@ -410,11 +397,7 @@
                 return;
             }
             const mass = m * v * mw;
-            const resText = `প্রয়োজনীয় কেমিক্যালের পরিমাণ: ${mass.toFixed(4)} grams`;
-            document.getElementById('molarityResult').innerHTML = `
-                <span>${resText}</span>
-                <button onclick="copyText('${mass.toFixed(4)} g')" class="text-xs bg-indigo-200 dark:bg-indigo-900 px-2 py-1 rounded hover:bg-indigo-300">Copy</button>
-            `;
+            document.getElementById('molarityResult').innerText = `প্রয়োজনীয় ভর: ${mass.toFixed(4)} grams`;
         }
 
         function calcDilution() {
@@ -422,285 +405,219 @@
             const v1 = parseFloat(document.getElementById('v1').value);
             const c2 = parseFloat(document.getElementById('c2').value);
             const v2 = parseFloat(document.getElementById('v2').value);
-            const resultDiv = document.getElementById('dilutionResult');
+            const res = document.getElementById('dilutionResult');
 
-            const inputs = [c1, v1, c2, v2];
-            const filledCount = inputs.filter(val => !isNaN(val)).length;
-
-            if (filledCount !== 3) {
-                resultDiv.innerHTML = "<span class='text-red-500 font-semibold'>দয়া করে যেকোনো ৩টি ঘর পূরণ করুন এবং ১টি ঘর ফাঁকা রাখুন।</span>";
-                return;
-            }
-
-            if (isNaN(v1)) {
-                const resV1 = (c2 * v2) / c1;
-                const solvent = v2 - resV1;
-                resultDiv.innerHTML = `
-                    <p>• Required Stock Vol (V₁): <strong>${resV1.toFixed(2)} mL</strong></p>
-                    <p>• Water/Buffer to Add: <strong>${solvent.toFixed(2)} mL</strong> (Total V₂: ${v2} mL)</p>
-                `;
-            } else if (isNaN(v2)) {
-                const resV2 = (c1 * v1) / c2;
-                const solvent = resV2 - v1;
-                resultDiv.innerHTML = `
-                    <p>• Final Target Volume (V₂): <strong>${resV2.toFixed(2)} mL</strong></p>
-                    <p>• Water/Buffer to Add: <strong>${solvent.toFixed(2)} mL</strong> (Using V₁: ${v1} mL)</p>
-                `;
-            } else if (isNaN(c1)) {
-                const resC1 = (c2 * v2) / v1;
-                resultDiv.innerHTML = `
-                    <p>• Required Stock Concentration (C₁): <strong>${resC1.toFixed(2)}</strong></p>
-                `;
-            } else if (isNaN(c2)) {
-                const resC2 = (c1 * v1) / v2;
-                resultDiv.innerHTML = `
-                    <p>• Final Target Concentration (C₂): <strong>${resC2.toFixed(2)}</strong></p>
-                `;
+            if(isNaN(v1) && c1 && c2 && v2) {
+                const reqV1 = (c2 * v2) / c1;
+                res.innerHTML = `V₁ = <strong>${reqV1.toFixed(2)} mL</strong> (Water to add: ${(v2 - reqV1).toFixed(2)} mL)`;
+            } else if(isNaN(v2) && c1 && v1 && c2) {
+                const reqV2 = (c1 * v1) / c2;
+                res.innerHTML = `V₂ = <strong>${reqV2.toFixed(2)} mL</strong> (Water to add: ${(reqV2 - v1).toFixed(2)} mL)`;
+            } else {
+                res.innerText = "দয়া করে সঠিক ৩টি মান দিন।";
             }
         }
 
         function calcGel() {
             const pct = parseFloat(document.getElementById('gelPct').value);
             const vol = parseFloat(document.getElementById('gelVol').value);
-            if (!pct || !vol) {
-                document.getElementById('gelResult').innerText = "দয়া করে সঠিক মান প্রবেশ করান।";
-                return;
-            }
-            const agarose = (pct / 100) * vol;
-            document.getElementById('gelResult').innerHTML = `
-                <p>• Agarose Powder: <strong>${agarose.toFixed(2)} g</strong></p>
-                <p>• 1x TAE/TBE Buffer: <strong>${vol} mL</strong></p>
-            `;
+            if (!pct || !vol) return;
+            document.getElementById('gelResult').innerHTML = `• Agarose Powder: <strong>${((pct / 100) * vol).toFixed(2)} g</strong> in ${vol} mL buffer.`;
         }
 
         function rpmToRcf() {
             const r = parseFloat(document.getElementById('cfRadius').value);
             const rpm = parseFloat(document.getElementById('cfRPM').value);
-            if(!r || !rpm) {
-                document.getElementById('cfResult').innerText = "Radius এবং RPM উভয় মান দিন।";
-                return;
+            if(r && rpm) {
+                const rcf = 1.118e-5 * r * Math.pow(rpm, 2);
+                document.getElementById('cfRCF').value = Math.round(rcf);
+                document.getElementById('cfResult').innerHTML = `Result: <strong>${Math.round(rcf)} ×g</strong>`;
             }
-            const rcf = 1.118 * Math.pow(10, -5) * r * Math.pow(rpm, 2);
-            document.getElementById('cfRCF').value = Math.round(rcf);
-            document.getElementById('cfResult').innerHTML = `Calculated RCF: <strong>${Math.round(rcf)} ×g</strong>`;
         }
 
         function rcfToRpm() {
             const r = parseFloat(document.getElementById('cfRadius').value);
             const rcf = parseFloat(document.getElementById('cfRCF').value);
-            if(!r || !rcf) {
-                document.getElementById('cfResult').innerText = "Radius এবং RCF উভয় মান দিন।";
-                return;
+            if(r && rcf) {
+                const rpm = Math.sqrt(rcf / (1.118e-5 * r));
+                document.getElementById('cfRPM').value = Math.round(rpm);
+                document.getElementById('cfResult').innerHTML = `Result: <strong>${Math.round(rpm)} RPM</strong>`;
             }
-            const rpm = Math.sqrt(rcf / (1.118 * Math.pow(10, -5) * r));
-            document.getElementById('cfRPM').value = Math.round(rpm);
-            document.getElementById('cfResult').innerHTML = `Calculated Speed: <strong>${Math.round(rpm)} RPM</strong>`;
         }
 
-        function calcPurity() {
-            const a260 = parseFloat(document.getElementById('a260').value);
-            const a280 = parseFloat(document.getElementById('a280').value);
-            if(!a260 || !a280) {
-                document.getElementById('purityResult').innerText = "দয়া করে দুটি ভ্যালুই দিন।";
-                return;
-            }
-            const ratio = a260 / a280;
-            let status = "";
-            if (ratio >= 1.8 && ratio <= 2.0) {
-                status = "<span class='text-green-600 dark:text-green-400 font-bold'>Pure DNA/RNA (Optimal)</span>";
-            } else if (ratio < 1.8) {
-                status = "<span class='text-red-600 dark:text-red-400 font-bold'>Low (Protein/Phenol Contamination)</span>";
-            } else {
-                status = "<span class='text-yellow-600 dark:text-yellow-400 font-bold'>High (RNA contamination in DNA sample)</span>";
-            }
-            document.getElementById('purityResult').innerHTML = `Ratio (A₂₆₀/A₂₈₀): <strong>${ratio.toFixed(2)}</strong> - ${status}`;
-        }
-
-        function calcDNA() {
-            const seq = document.getElementById('dnaSeq').value.trim().toUpperCase();
-            if (!seq || !/^[ATGC]+$/.test(seq)) {
-                document.getElementById('dnaResult').innerHTML = '<span class="text-red-500 font-semibold">দয়া করে সঠিক DNA সিকোয়েন্স দিন (শুধু A, T, G, C)।</span>';
-                return;
-            }
-            const len = seq.length;
-            const g = (seq.match(/G/g) || []).length;
-            const c = (seq.match(/C/g) || []).length;
-            const a = (seq.match(/A/g) || []).length;
-            const t = (seq.match(/T/g) || []).length;
+        // --- ADVANCED LAB JS ---
+        function calcAntibiotic() {
+            const stock = parseFloat(document.getElementById('abStock').value); // mg/mL
+            const work = parseFloat(document.getElementById('abWork').value);   // ug/mL
+            const vol = parseFloat(document.getElementById('abVol').value);     // mL
+            if(!stock || !work || !vol) return;
             
-            const gcPercent = ((g + c) / len) * 100;
-            let tm = (a + t) * 2 + (g + c) * 4;
-            if (len >= 14) tm = 64.9 + 41 * (g + c - 16.4) / len;
+            // (Work ug/mL / (Stock mg/mL * 1000)) * Vol mL = Vol in mL -> * 1000 = uL
+            const reqUl = (work / (stock * 1000)) * vol * 1000;
+            document.getElementById('abResult').innerHTML = `যোগ করতে হবে: <strong>${reqUl.toFixed(2)} µL</strong> Stock Antibiotic`;
+        }
 
-            const map = {'A':'T', 'T':'A', 'G':'C', 'C':'G'};
-            const revComp = seq.split('').reverse().map(base => map[base]).join('');
-            const mrna = seq.replace(/T/g, 'U');
+        function calcViability() {
+            const live = parseFloat(document.getElementById('liveCells').value) || 0;
+            const dead = parseFloat(document.getElementById('deadCells').value) || 0;
+            const sq = parseFloat(document.getElementById('squares').value) || 4;
+            const total = live + dead;
+            if(total === 0) return;
 
-            document.getElementById('dnaResult').innerHTML = `
-                <p>• <strong>Length:</strong> ${len} bp | <strong>GC Content:</strong> ${gcPercent.toFixed(2)}% | <strong>Tm:</strong> ${tm.toFixed(2)} °C</p>
-                <p>• <strong>Reverse Complement (3'-5'):</strong> <code class="bg-gray-200 dark:bg-gray-800 px-1 rounded">${revComp}</code></p>
-                <p>• <strong>mRNA Transcribed:</strong> <code class="bg-gray-200 dark:bg-gray-800 px-1 rounded">${mrna}</code></p>
+            const viability = (live / total) * 100;
+            const conc = (live / sq) * 10000; // cells/mL
+            document.getElementById('viabilityResult').innerHTML = `
+                <p>• Viability: <strong>${viability.toFixed(2)}%</strong></p>
+                <p>• Live Cell Density: <strong>${conc.toExponential(2)} cells/mL</strong></p>
             `;
+        }
+
+        function calcBeerLambert() {
+            const abs = parseFloat(document.getElementById('blAbs').value);
+            const ext = parseFloat(document.getElementById('blExt').value);
+            const path = parseFloat(document.getElementById('blPath').value) || 1;
+            if(!abs || !ext) return;
+            const conc = abs / (ext * path);
+            document.getElementById('blResult').innerHTML = `Concentration (c): <strong>${conc.toExponential(3)} M</strong> (${(conc*1000).toFixed(3)} mM)`;
+        }
+
+        function convertMass() {
+            const val = parseFloat(document.getElementById('unitMassVal').value);
+            const from = document.getElementById('unitMassFrom').value;
+            if(isNaN(val)) return;
+            let g = val;
+            if(from === 'mg') g = val / 1e3;
+            if(from === 'ug') g = val / 1e6;
+            if(from === 'ng') g = val / 1e9;
+
+            document.getElementById('massConvResult').innerText = `${g} g | ${g*1e3} mg | ${g*1e6} µg | ${g*1e9} ng`;
+        }
+
+        function convertVol() {
+            const val = parseFloat(document.getElementById('unitVolVal').value);
+            const from = document.getElementById('unitVolFrom').value;
+            if(isNaN(val)) return;
+            let l = val;
+            if(from === 'mL') l = val / 1e3;
+            if(from === 'uL') l = val / 1e6;
+
+            document.getElementById('volConvResult').innerText = `${l} L | ${l*1e3} mL | ${l*1e6} µL`;
+        }
+
+        // --- BIOINFORMATICS JS ---
+        function designPrimers() {
+            const seq = document.getElementById('primerTarget').value.trim().toUpperCase();
+            const len = parseInt(document.getElementById('primerLen').value) || 20;
+            if(seq.length < len) {
+                document.getElementById('primerResult').innerText = "সিকোয়েন্স পঠিত লেংথ-এর চেয়ে বড় হতে হবে।";
+                return;
+            }
+            const fwd = seq.substring(0, len);
+            const revPart = seq.substring(seq.length - len);
+            const map = {'A':'T', 'T':'A', 'G':'C', 'C':'G'};
+            const rev = revPart.split('').reverse().map(b => map[b] || b).join('');
+
+            const getTm = (s) => {
+                const a = (s.match(/A/g)||[]).length, t = (s.match(/T/g)||[]).length;
+                const g = (s.match(/G/g)||[]).length, c = (s.match(/C/g)||[]).length;
+                return (a+t)*2 + (g+c)*4;
+            };
+
+            document.getElementById('primerResult').innerHTML = `
+                <p>• <strong>Forward Primer (5'-3'):</strong> <code class="bg-gray-200 dark:bg-gray-800 px-1 rounded">${fwd}</code> (Tm: ~${getTm(fwd)}°C)</p>
+                <p>• <strong>Reverse Primer (5'-3'):</strong> <code class="bg-gray-200 dark:bg-gray-800 px-1 rounded">${rev}</code> (Tm: ~${getTm(rev)}°C)</p>
+            `;
+        }
+
+        function findRestrictionSites() {
+            const seq = document.getElementById('restrictSeq').value.trim().toUpperCase();
+            if(!seq) return;
+            const enzymes = {
+                'EcoRI': 'GAATTC',
+                'HindIII': 'AAGCTT',
+                'BamHI': 'GGATCC',
+                'XhoI': 'CTCGAG'
+            };
+            let found = [];
+            for(let [e, site] of Object.entries(enzymes)) {
+                let pos = seq.indexOf(site);
+                if(pos !== -1) found.push(`<strong>${e}</strong> (${site}) at position ${pos + 1}`);
+            }
+            document.getElementById('restrictResult').innerHTML = found.length ? found.join('<br>') : "কোনো কমন কাটিং সাইট পাওয়া যায়নি।";
+        }
+
+        function translateDNA() {
+            const seq = document.getElementById('translateSeq').value.trim().toUpperCase();
+            const code = {
+                'ATA':'I', 'ATC':'I', 'ATT':'I', 'ATG':'M', 'ACA':'T', 'ACC':'T', 'ACG':'T', 'ACT':'T',
+                'AAC':'N', 'AAT':'N', 'AAA':'K', 'AAG':'K', 'AGC':'S', 'AGT':'S', 'AGA':'R', 'AGG':'R',
+                'CTA':'L', 'CTC':'L', 'CTG':'L', 'CTT':'L', 'CCA':'P', 'CCC':'P', 'CCG':'P', 'CCT':'P',
+                'CAC':'H', 'CAT':'H', 'CAA':'Q', 'CAG':'Q', 'CGA':'R', 'CGC':'R', 'CGG':'R', 'CGT':'R',
+                'GTA':'V', 'GTC':'V', 'GTG':'V', 'GTT':'V', 'GCA':'A', 'GCC':'A', 'GCG':'A', 'GCT':'A',
+                'GAC':'D', 'GAT':'D', 'GAA':'E', 'GAG':'E', 'GGA':'G', 'GGC':'G', 'GGG':'G', 'GGT':'G',
+                'TCA':'S', 'TCC':'S', 'TCG':'S', 'TCT':'S', 'TTC':'F', 'TTT':'F', 'TTA':'L', 'TTG':'L',
+                'TAC':'Y', 'TAT':'Y', 'TAA':'*', 'TAG':'*', 'TGC':'C', 'TGT':'C', 'TGA':'*', 'TGG':'W'
+            };
+            let prot = '';
+            for(let i=0; i<seq.length-2; i+=3) {
+                let codon = seq.substring(i, i+3);
+                prot += (code[codon] || '?');
+            }
+            document.getElementById('translateResult').innerText = `Protein Sequence: ${prot}`;
         }
 
         function calcAlign() {
             const s1 = document.getElementById('alignSeq1').value.trim().toUpperCase();
             const s2 = document.getElementById('alignSeq2').value.trim().toUpperCase();
-            if(!s1 || !s2) {
-                document.getElementById('alignResult').innerText = "দুটো সিকোয়েন্সই ইনপুট দিন।";
-                return;
-            }
+            if(!s1 || !s2) return;
             const maxLen = Math.max(s1.length, s2.length);
             let matches = 0;
             for(let i=0; i < Math.min(s1.length, s2.length); i++) {
                 if(s1[i] === s2[i]) matches++;
             }
-            const identity = (matches / maxLen) * 100;
-            document.getElementById('alignResult').innerHTML = `
-                <p>• <strong>Identity:</strong> ${identity.toFixed(2)}% (${matches}/${maxLen} bases matched)</p>
-            `;
+            document.getElementById('alignResult').innerHTML = `Identity: <strong>${((matches/maxLen)*100).toFixed(2)}%</strong> (${matches}/${maxLen} bases matched)`;
         }
 
-        function calcPCR() {
-            const n = parseInt(document.getElementById('pcrRxns').value);
-            const totalVol = parseFloat(document.getElementById('pcrVol').value) || 25;
-            if(!n || n <= 0) {
-                document.getElementById('pcrResult').innerText = "দয়া করে সঠিক Reaction সংখ্যা লিখুন।";
-                return;
-            }
-            const buffer = (totalVol * 0.1) * n;
-            const dntp = (totalVol * 0.04) * n;
-            const fPrimer = (totalVol * 0.04) * n;
-            const rPrimer = (totalVol * 0.04) * n;
-            const taq = (totalVol * 0.01) * n;
-            const water = (totalVol * 0.77) * n;
-
-            document.getElementById('pcrResult').innerHTML = `
-                <p>• 10x Buffer: <strong>${buffer.toFixed(1)} &mu;L</strong></p>
-                <p>• dNTP Mix: <strong>${dntp.toFixed(1)} &mu;L</strong></p>
-                <p>• Forward Primer: <strong>${fPrimer.toFixed(1)} &mu;L</strong></p>
-                <p>• Reverse Primer: <strong>${rPrimer.toFixed(1)} &mu;L</strong></p>
-                <p>• Taq Polymerase: <strong>${taq.toFixed(1)} &mu;L</strong></p>
-                <p>• Nuclease-free Water: <strong>${water.toFixed(1)} &mu;L</strong></p>
-                <p class="mt-1 text-xs text-purple-700 dark:text-purple-300 font-semibold">* Excludes DNA template volume.</p>
-            `;
-        }
-
-        function calcProtein() {
-            const seq = document.getElementById('protSeq').value.trim().toUpperCase();
-            if(!seq || !/^[ACDEFGHIKLMNPQRSTVWY]+$/.test(seq)) {
-                document.getElementById('protResult').innerHTML = "<span class='text-red-500'>দয়া করে সঠিক Single-Letter Amino Acid Sequence দিন।</span>";
-                return;
-            }
-            const weights = {
-                'A': 89.09, 'R': 174.20, 'N': 132.12, 'D': 133.10, 'C': 121.16,
-                'E': 147.13, 'Q': 146.15, 'G': 75.07, 'H': 155.16, 'I': 131.17,
-                'L': 131.17, 'K': 146.19, 'M': 149.21, 'F': 165.19, 'P': 115.13,
-                'S': 105.09, 'T': 119.12, 'W': 204.23, 'Y': 181.19, 'V': 117.15
-            };
-            let mw = 0;
-            for(let char of seq) {
-                mw += weights[char];
-            }
-            mw -= (seq.length - 1) * 18.015;
-
-            document.getElementById('protResult').innerHTML = `
-                <p>• <strong>Amino Acid Count:</strong> ${seq.length} aa</p>
-                <p>• <strong>Estimated MW:</strong> ${mw.toFixed(2)} Da (${(mw/1000).toFixed(2)} kDa)</p>
-            `;
-        }
-
-        function openPDB() {
-            const id = document.getElementById('pdbId').value.trim();
-            if(id) window.open(`https://www.rcsb.org/structure/${id}`, '_blank');
-        }
-
-        function openNCBI() {
-            const term = document.getElementById('ncbiTerm').value.trim();
-            if(term) window.open(`https://www.ncbi.nlm.nih.gov/nuccore/?term=${encodeURIComponent(term)}`, '_blank');
-        }
-
-        function addCourseRow() {
-            const div = document.createElement('div');
-            div.className = 'grid grid-cols-12 gap-2 mt-2';
-            div.innerHTML = `
-                <input type="text" placeholder="Course Name" class="col-span-5 p-2 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
-                <input type="number" placeholder="Credit" class="col-span-3 p-2 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 course-credit outline-none" step="0.5" value="3">
-                <select class="col-span-4 p-2 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 course-grade outline-none">
-                    <option value="4.0">A (4.0)</option>
-                    <option value="3.7">A- (3.7)</option>
-                    <option value="3.3">B+ (3.3)</option>
-                    <option value="3.0">B (3.0)</option>
-                    <option value="2.7">B- (2.7)</option>
-                    <option value="2.3">C+ (2.3)</option>
-                    <option value="2.0">C (2.0)</option>
-                    <option value="1.7">C- (1.7)</option>
-                    <option value="1.3">D+ (1.3)</option>
-                    <option value="1.0">D (1.0)</option>
-                    <option value="0.0">F (0.0)</option>
-                </select>
-            `;
-            document.getElementById('courseRows').appendChild(div);
-        }
-
-        function calcCGPA() {
-            const credits = document.querySelectorAll('.course-credit');
-            const grades = document.querySelectorAll('.course-grade');
-            let totalCredits = 0;
-            let totalPoints = 0;
-
-            for(let i=0; i<credits.length; i++) {
-                const c = parseFloat(credits[i].value);
-                const g = parseFloat(grades[i].value);
-                if(!isNaN(c) && !isNaN(g)) {
-                    totalCredits += c;
-                    totalPoints += (c * g);
-                }
-            }
-
-            if(totalCredits === 0) {
-                document.getElementById('cgpaResult').innerText = "দয়া করে সঠিকভাবে কোর্স তথ্য দিন।";
-                return;
-            }
-
-            const cgpa = totalPoints / totalCredits;
-            document.getElementById('cgpaResult').innerText = `Calculated CGPA: ${cgpa.toFixed(2)} (Total Credits: ${totalCredits})`;
-        }
-
+        // --- ACADEMIC & SAFETY JS ---
         function calcTargetGPA() {
             const currCGPA = parseFloat(document.getElementById('currCGPA').value);
             const compCred = parseFloat(document.getElementById('completedCredits').value);
             const targetCGPA = parseFloat(document.getElementById('targetCGPA').value);
             const remCred = parseFloat(document.getElementById('remainingCredits').value);
-
-            if (isNaN(currCGPA) || isNaN(compCred) || isNaN(targetCGPA) || isNaN(remCred)) {
-                document.getElementById('targetResult').innerText = "দয়া করে ৪টি ঘরই সঠিকভাবে পূরণ করুন।";
-                return;
-            }
+            if(isNaN(currCGPA) || isNaN(compCred) || isNaN(targetCGPA) || isNaN(remCred)) return;
 
             const reqGPA = ((targetCGPA * (compCred + remCred)) - (currCGPA * compCred)) / remCred;
-
-            if (reqGPA > 4.0) {
-                document.getElementById('targetResult').innerHTML = `<span class='text-red-500 font-semibold'>Required GPA: ${reqGPA.toFixed(2)} (এটি ৪.০০-এর বেশি, তাই এই টার্গেট অর্জন করা সম্ভব নয়!)</span>`;
-            } else if (reqGPA < 0) {
-                document.getElementById('targetResult').innerHTML = `<span class='text-green-600 font-semibold'>আপনি ইতিমধ্যে আপনার টার্গেট CGPA অর্জন করেছেন!</span>`;
-            } else {
-                document.getElementById('targetResult').innerHTML = `বাকি <strong>${remCred}</strong> ক্রেডিটে আপনাকে গড়ে অন্তত <strong>${reqGPA.toFixed(2)}</strong> GPA বজায় রাখতে হবে।`;
-            }
+            document.getElementById('targetResult').innerHTML = reqGPA > 4.0 
+                ? `<span class="text-red-500">Required GPA: ${reqGPA.toFixed(2)} (অসম্ভব!)</span>` 
+                : `বাকি ক্রেডিটে অন্তত <strong>${reqGPA.toFixed(2)}</strong> GPA বজায় রাখতে হবে।`;
         }
 
+        // Safety Cards Data
+        const safetyCards = [
+            { icon: '☣️', name: 'Biohazard', desc: 'Biological agents that pose a threat to the health of living organisms.' },
+            { icon: '🔥', name: 'Flammable', desc: 'Chemicals that ignite easily and burn rapidly.' },
+            { icon: '☠️', name: 'Toxic / Poison', desc: 'Substances that can cause severe illness or death if ingested or absorbed.' },
+            { icon: '🧪', name: 'Corrosive', desc: 'Chemicals that destroy living tissue and corrode metals on contact.' },
+            { icon: '☢️', name: 'Radioactive', desc: 'Sources emitting ionizing radiation.' }
+        ];
+        let currentSafetyIndex = 0;
+        function nextSafetyCard() {
+            currentSafetyIndex = (currentSafetyIndex + 1) % safetyCards.length;
+            const card = safetyCards[currentSafetyIndex];
+            document.getElementById('safetySymbol').innerText = card.icon;
+            document.getElementById('safetyName').innerText = card.name;
+            document.getElementById('safetyDesc').innerText = card.desc;
+        }
+
+        // APA Citation
         function genCite() {
-            const author = document.getElementById('citeAuthor').value.trim();
-            const year = document.getElementById('citeYear').value.trim();
-            const title = document.getElementById('citeTitle').value.trim();
-            const journal = document.getElementById('citeJournal').value.trim();
-
-            if(!author || !year || !title || !journal) {
-                document.getElementById('citeResult').innerText = "দয়া করে সবকয়টি ফিল্ড পূরণ করুন।";
-                return;
+            const a = document.getElementById('citeAuthor').value.trim();
+            const y = document.getElementById('citeYear').value.trim();
+            const t = document.getElementById('citeTitle').value.trim();
+            const j = document.getElementById('citeJournal').value.trim();
+            if(a && y && t && j) {
+                document.getElementById('citeResult').innerText = `${a} (${y}). ${t}. ${j}.`;
             }
-
-            document.getElementById('citeResult').innerText = `${author} (${year}). ${title}. ${journal}.`;
         }
     </script>
 </body>
