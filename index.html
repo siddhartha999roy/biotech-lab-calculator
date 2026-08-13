@@ -81,25 +81,30 @@
                 </div>
             </div>
 
-            <!-- Tool 2: Dilution -->
+            <!-- Tool 2: Dilution (UPDATED FOR BOTH V1 & V2) -->
             <div class="p-5 bg-blue-50 dark:bg-gray-700/50 rounded-xl border border-blue-100 dark:border-gray-600 shadow-sm">
-                <h2 class="text-xl font-bold text-blue-900 dark:text-blue-300 mb-3">💧 2. Dilution Calculator (C₁V₁ = C₂V₂)</h2>
+                <h2 class="text-xl font-bold text-blue-900 dark:text-blue-300 mb-2">💧 2. Dilution Calculator (C₁V₁ = C₂V₂)</h2>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">* V₁ অথবা V₂ এর যেকোনো একটি খালি রাখুন, সেটি স্বয়ংক্রিয়ভাবে বের হয়ে যাবে।</p>
                 <div class="space-y-3">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Stock Conc. (C₁):</label>
-                            <input type="number" id="c1" placeholder="e.g. 10" step="0.1" class="w-full p-2.5 mt-1 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
+                            <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">Stock Conc. (C₁):</label>
+                            <input type="number" id="c1" placeholder="e.g. 10" step="any" class="w-full p-2.5 mt-1 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Target Conc. (C₂):</label>
-                            <input type="number" id="c2" placeholder="e.g. 1" step="0.1" class="w-full p-2.5 mt-1 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
+                            <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">Stock Vol (V₁ mL):</label>
+                            <input type="number" id="v1" placeholder="Empty for V₁" step="any" class="w-full p-2.5 mt-1 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Target Vol (V₂ mL):</label>
-                            <input type="number" id="v2" placeholder="e.g. 500" step="1" class="w-full p-2.5 mt-1 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
+                            <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">Target Conc. (C₂):</label>
+                            <input type="number" id="c2" placeholder="e.g. 1" step="any" class="w-full p-2.5 mt-1 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">Target Vol (V₂ mL):</label>
+                            <input type="number" id="v2" placeholder="Empty for V₂" step="any" class="w-full p-2.5 mt-1 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 outline-none">
                         </div>
                     </div>
-                    <button onclick="calcDilution()" class="w-full bg-blue-600 text-white py-2.5 rounded-lg hover:bg-blue-700 font-semibold transition">Calculate Stock Volume (V₁)</button>
+                    <button onclick="calcDilution()" class="w-full bg-blue-600 text-white py-2.5 rounded-lg hover:bg-blue-700 font-semibold transition">Calculate Dilution</button>
                     <div id="dilutionResult" class="mt-2 text-blue-950 dark:text-blue-200 font-medium"></div>
                 </div>
             </div>
@@ -282,12 +287,13 @@
                 Department of Genetic Engineering & Biotechnology, East West University
             </p>
             
-            <!-- Social Links / FB ID -->
-            <div class="mt-3 flex justify-center items-center gap-3">
-                <a href="https://facebook.com/siddharth3roy" target="_blank" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-semibold hover:bg-blue-700 transition shadow-sm">
+            <!-- Social Links & FB Username Display -->
+            <div class="mt-3 flex flex-col items-center gap-1.5">
+                <a href="https://facebook.com/siddharth3roy" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-semibold hover:bg-blue-700 transition shadow-sm">
                     <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
                     Connect on Facebook
                 </a>
+                <span class="text-xs font-mono text-gray-500 dark:text-gray-400">FB ID: @siddharth3roy</span>
             </div>
         </footer>
 
@@ -339,20 +345,40 @@
             `;
         }
 
+        // UPDATED DILUTION CALCULATOR FUNCTION (V1 and V2 Flexible)
         function calcDilution() {
             const c1 = parseFloat(document.getElementById('c1').value);
+            const v1Input = parseFloat(document.getElementById('v1').value);
             const c2 = parseFloat(document.getElementById('c2').value);
-            const v2 = parseFloat(document.getElementById('v2').value);
-            if(!c1 || !c2 || !v2) {
-                document.getElementById('dilutionResult').innerText = "দয়া করে সবগুলো ঘর পূরণ করুন।";
+            const v2Input = parseFloat(document.getElementById('v2').value);
+            const resultDiv = document.getElementById('dilutionResult');
+
+            if (!c1 || !c2) {
+                resultDiv.innerText = "দয়া করে C₁ এবং C₂ এর মান দিন।";
                 return;
             }
-            const v1 = (c2 * v2) / c1;
-            const solvent = v2 - v1;
-            document.getElementById('dilutionResult').innerHTML = `
-                <p>• Stock Solution (V₁): <strong>${v1.toFixed(2)} mL</strong></p>
-                <p>• Water/Buffer to Add: <strong>${solvent.toFixed(2)} mL</strong> (Total: ${v2} mL)</p>
-            `;
+
+            // Case 1: Calculate V1 (when V1 is empty, V2 is given)
+            if (isNaN(v1Input) && !isNaN(v2Input)) {
+                const v1 = (c2 * v2Input) / c1;
+                const solvent = v2Input - v1;
+                resultDiv.innerHTML = `
+                    <p>• Required Stock Vol (V₁): <strong>${v1.toFixed(2)} mL</strong></p>
+                    <p>• Water/Buffer to Add: <strong>${solvent.toFixed(2)} mL</strong> (Total V₂: ${v2Input} mL)</p>
+                `;
+            } 
+            // Case 2: Calculate V2 (when V2 is empty, V1 is given)
+            else if (!isNaN(v1Input) && isNaN(v2Input)) {
+                const v2 = (c1 * v1Input) / c2;
+                const solvent = v2 - v1Input;
+                resultDiv.innerHTML = `
+                    <p>• Final Target Volume (V₂): <strong>${v2.toFixed(2)} mL</strong></p>
+                    <p>• Water/Buffer to Add: <strong>${solvent.toFixed(2)} mL</strong> (Using V₁: ${v1Input} mL)</p>
+                `;
+            } 
+            else {
+                resultDiv.innerText = "V₁ অথবা V₂ এর যেকোনো একটি ঘর খালি রাখুন (যেটি হিসাব করতে চান)।";
+            }
         }
 
         function calcPurity() {
@@ -458,7 +484,6 @@
             let totalMw = 0;
             for(let char of seq) totalMw += weights[char] || 0;
             
-            // Subtract H2O weight (18.015 g/mol) for each peptide bond formed
             if (seq.length > 1) {
                 totalMw -= (seq.length - 1) * 18.015;
             }
