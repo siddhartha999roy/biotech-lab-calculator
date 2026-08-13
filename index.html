@@ -777,11 +777,97 @@
             }
 
             const buzzwords = [
-                'delve', 'testament', 'pivotal', 'underscores', 'fostering', 
-                'crucial', 'realm', 'tapestry', 'synergy', 'beacon', 'unwavering', 
-                'game-changer', 'vibrant', 'interplay', 'paramount', 'furthermore', 
-                'moreover', 'in conclusion', 'it is important to note'
-            ];
+              // --- এআই রাইটিংয়ে অতি ব্যবহৃত কমন ভার্ব ও অ্যাকশন ওয়ার্ড ---
+    'delve', 'delves', 'delving', 'foster', 'fosters', 'fostering', 
+    'underscore', 'underscores', 'underscoring', 'highlight', 'highlights', 'highlighting', 
+    'showcase', 'showcases', 'showcasing', 'bridge', 'bridges', 'bridging', 
+    'empower', 'empowers', 'empowering', 'elevate', 'elevates', 'elevating', 
+    'illuminate', 'illuminates', 'illuminating', 'harness', 'harnesses', 'harnessing', 
+    'unleash', 'unleashes', 'unleashing', 'cultivate', 'cultivates', 'cultivating', 
+    'embrace', 'embraces', 'embracing', 'navigate', 'navigates', 'navigating', 
+    'bolster', 'bolsters', 'bolstering', 'streamline', 'streamlines', 'streamlining', 
+    'spearhead', 'spearheads', 'spearheading', 'catalyze', 'catalyzes', 'catalyzing', 
+    'augment', 'augments', 'augmenting', 'propel', 'propels', 'propelling', 
+    'synergize', 'synergizes', 'synergizing', 'pioneering', 'champion', 'champions',
+
+    // --- বিশেষণ বা এডজেক্টিভ (Adjectives) ---
+    'pivotal', 'crucial', 'paramount', 'imperative', 'vital', 'essential', 
+    'integral', 'indispensable', 'fundamental', 'transformative', 'revolutionary', 
+    'game-changing', 'groundbreaking', 'unprecedented', 'monumental', 'profound', 
+    'comprehensive', 'holistic', 'robust', 'dynamic', 'fluid', 'seamless', 
+    'frictionless', 'meticulous', 'rigorous', 'unwavering', 'unyielding', 'formidable', 
+    'multifaceted', 'intricate', 'labyrinthine', 'nuanced', 'subtle', 'striking', 
+    'compelling', 'persuasive', 'captivating', 'fascinating', 'engrossing', 'absorbing', 
+    'vibrant', 'blossoming', 'thriving', 'flourishing', 'nascent', 'emerging', 
+    'cutting-edge', 'state-of-the-art', 'next-generation', 'advanced', 'sophisticated', 
+
+    // --- নাউন ও রূপক শব্দ (Nouns & Metaphors) ---
+    'testament', 'beacon', 'catalyst', 'cornerstone', 'keystone', 'linchpin', 
+    'nexus', 'paradigm', 'framework', 'architecture', 'ecosystem', 'landscape', 
+    'tapestry', 'mosaic', 'realm', 'arena', 'sphere', 'domain', 'horizon', 
+    'frontier', 'symbiosis', 'interplay', 'synergy', 'confluence', 'juxtaposition', 
+    'paradox', 'dichotomy', 'spectrum', 'panoply', 'plethora', 'myriad', 
+    'labyrinth', 'maze', 'odyssey', 'journey', 'voyage', 'pathway', 'blueprint', 
+    'roadmap', 'catalyst', 'impetus', 'momentum', 'genesis', 'renaissance', 
+
+    // --- ট্রানজিশন এবং লিংকার ফ্রেজ (Transition Phrases) ---
+    'furthermore', 'moreover', 'consequently', 'subsequently', 'conversely', 
+    'neveretheless', 'nonetheless', 'meanwhile', 'alternatively', 'accordingly', 
+    'henceforth', 'thereafter', 'heretofore', 'in addition', 'as a result', 
+    'on the contrary', 'in contrast', 'by the same token', 'in a similar vein', 
+    'on one hand', 'on the other hand', 'for instance', 'for example', 
+    'to illustrate', 'specifically', 'in particular', 'notably', 'significantly', 
+    'importantly', 'crucially', 'ultimately', 'in essence', 'at its core', 
+    'by and large', 'on the whole', 'all things considered', 'in summary', 
+    'in conclusion', 'to conclude', 'to summarize', 'in short', 'briefly put',
+
+    // --- এআই স্টেরিওটাইপ ক্লিশে ফ্রেজ (AI Cliché Phrases) ---
+    'it is important to note', 'it is worth noting', 'it is crucial to understand', 
+    'it must be emphasized', 'plays a pivotal role', 'serves as a testament', 
+    'in the realm of', 'in today\'s fast-paced world', 'in the digital age', 
+    'navigating the complexities', 'sheds light on', 'paving the way for', 
+    'opening new doors', 'testament to the power', 'at the forefront of', 
+    'driving force behind', 'the ever-evolving landscape', 'in order to achieve', 
+    'a wide array of', 'a diverse range of', 'deep dive into', 'taking a closer look', 
+    'unlocking the potential', 'unlocked the secrets', 'mastering the art of', 
+    'beyond the shadow of a doubt', 'clear understanding of', 'holistic approach to', 
+
+    // --- অতিরিক্ত ফরমাল বা অতিরিক্ত এআই-ঘেঁষা শব্দ ---
+    'expedite', 'facilitate', 'ameliorate', 'mitigate', 'alleviate', 'eradicate', 
+    'exacerbate', 'eschew', 'emulate', 'simulate', 'synthesize', 'aggregate', 
+    'disseminate', 'promulgate', 'articulate', 'elucidate', 'delineate', 'scrutinize', 
+    'interrogating', 'conceptualize', 'operationalize', 'contextualize', 'prioritize', 
+    'incentivize', 'optimize', 'maximize', 'minimize', 'standardize', 'quantify', 
+    'qualify', 'corroborate', 'substantiate', 'authenticate', 'validate', 'verify', 
+    'attest', 'manifest', 'exhibit', 'display', 'demonstrate', 'portray', 
+    'depict', 'characterize', 'personify', 'embody', 'epitomize', 'exemplify', 
+    'illustrate', 'reflect', 'mirror', 'echo', 'resonate', 'reverberate',
+
+    // --- অতিরিক্ত অ্যাকাডেমিক ও টেকনিক্যাল ফিলার শব্দ ---
+    'aforementioned', 'heretofore', 'therein', 'thereof', 'herein', 'hereof', 
+    'whereby', 'wherein', 'whereof', 'whence', 'whither', 'whatsoever', 
+    'whomsoever', 'whosoever', 'notwithstanding', 'not withstanding', 'pursuant', 
+    'accordingly', 'consequently', 'hence', 'thence', 'thus', 'thereby', 
+    'therefrom', 'thereagainst', 'thereupon', 'hereupon', 'hereunder', 'thereunder',
+    'sub-category', 'macro-level', 'micro-level', 'inter-disciplinary', 'multi-disciplinary',
+    'meta-analysis', 'paradigm-shift', 'state-of-affairs', 'status-quo', 'sine-qua-non',
+
+    // --- সাম্প্রতিক জেমিনি/চ্যাটজিপিটি বহুল ব্যবহৃত শব্দ গুচ্ছ ---
+    'meticulously', 'scrupulously', 'conscientiously', 'painstakingly', 'assiduously',
+    'tirelessly', 'incessantly', 'unceasingly', 'relentlessly', 'perpetually',
+    'eternally', 'immortally', 'infinitely', 'boundlessly', 'limitlessly',
+    'unfathomably', 'incalculably', 'immeasurably', 'vastly', 'immensely',
+    'tremendously', 'profoundly', 'intensely', 'fiercely', 'ferociously',
+    'passionately', 'zealously', 'ardently', 'fervently', 'enthusiastically',
+    'eagerly', 'keenly', 'avidity', 'voraciously', 'insatiably', 'cravingly',
+    'luminescent', 'phosphorescent', 'fluorescent', 'iridescent', 'radiant',
+    'glowing', 'shining', 'sparkling', 'glimmering', 'glinting', 'glint',
+    'shimmering', 'glinting', 'twinkling', 'dazzling', 'resplendent', 'splendid',
+    'magnificent', 'glorious', 'sublime', 'majestic', 'regal', 'imperial',
+    'sovereign', 'supreme', 'ultimate', 'absolute', 'unconditional', 'categorical',
+    'definitive', 'conclusive', 'decisive', 'determinative', 'terminal', 'final',
+    'closing', 'concluding', 'winding-down', 'wrapping-up', 'finishing', 'terminating'
+];
 
             let highlightedText = text;
             let matchCount = 0;
